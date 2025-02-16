@@ -1,0 +1,39 @@
+
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}">
+        <div class="container">
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+              <!-- About -->
+              <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
+                <a class="nav-link" href="{{ '/' | relative_url }}">
+
+                </a>
+              </li>          
+              <!-- Toogle language mode -->
+              <li class="nav-item ">
+                  <!--
+                  <a class="nav-link" href="https://mpek29.github.io/" style="padding-bottom: 0.4rem;padding-top: 0.4rem;padding-right: 0px;">
+                      <img alt="FR" title="FR" src="https://mpek29.github.io/en/assets/img/languages/fr.gif" style="padding-left: 6px;padding-right: 0px;">
+                  </a>
+                  -->
+                  <a class="nav-link" href="https://mpek29.github.io/en/" style="padding-bottom: 0.4rem;padding-top: 0.4rem;padding-right: 0px;">
+                      <img alt="EN" title="EN" src="https://mpek29.github.io/assets/img/languages/en.gif" style="padding-left: 6px;padding-right: 0px;">
+                  </a>   
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    </header>
