@@ -1,0 +1,32 @@
+name: Sync README to About
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Exécute tous les jours à minuit UTC
+  push:
+    branches:
+      - main  # Exécute aussi l'action à chaque push
+  workflow_dispatch:  # Permet d'exécuter manuellement l’action
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Télécharger le README.md
+        run: |
+          curl -o README.tmp https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
+
+      - name: Fusionner l'en-tête YAML de about.md avec le README
+        run: |
+          awk '/^---$/{i++} i<2' about.md > about_tmp.md  # Garde l'en-tête YAML
+          echo "" >> about_tmp.md  # Ajoute une ligne vide
+          cat README.tmp >> about_tmp.md  # Ajoute le contenu du README
+          mv about_tmp.md about.md  # Remplace le fichier original
+
+      - name: Vérifier et pousser les modifications
+        run: |
+          git diff --quiet && exit 0 || (git config --global user.email "github-actions@github.com" && git config --global user.name "GitHub Actions" && git add about.md && git commit -m "Mise à jour automatique de about.md" && git push)
