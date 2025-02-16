@@ -1,8 +1,6 @@
 ---
-layout: resume
-permalink: /resume/
-title: CV
-nav: true
-nav_order: 4
-pdf: PASCO_Florian.pdf
+layout: default
+title: Resume
 ---
+# Resume
+Ceci est la page "Resume".

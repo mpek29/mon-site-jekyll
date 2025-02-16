@@ -3,4 +3,4 @@ layout: default
 title: Projects
 ---
 # Projects
-Ceci est la page "Projects".
+Bienvenue sur ma page des projets.
