@@ -1,53 +1,48 @@
-name: Update Project Pages from External Repositories
+name: Create Markdown Files for Repos
 
 on:
-  schedule:
-    - cron: '0 12 * * *' # Exécute tous les jours à midi
-  workflow_dispatch: # Permet de le lancer manuellement
+  push:
+    branches:
+      - main  # ou la branche de votre choix
+  workflow_dispatch:  # Permet de déclencher manuellement l'action
 
 jobs:
-  update-project-pages:
+  create_markdown_files:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Download list of repositories from external source
-        run: |
-          mkdir -p temp
-          # Suppose we get a list of repositories (you peux ajuster ici selon ta source de repos)
-          curl -f -o temp/repos_list.txt https://raw.githubusercontent.com/mpek29/MPek29/master/repos_list.txt
-          if [ $? -ne 0 ]; then echo "Failed to download repos list"; exit 1; fi
+    - name: List repositories and create .md files
+      run: |
+        echo "Listing repositories and creating markdown files..."
+        
+        # Récupérer la liste des dépôts
+        REPOS=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name')
+        
+        # Créer le dossier _projects si nécessaire
+        mkdir -p _projects
+        
+        # Créer un fichier .md pour chaque dépôt s'il n'existe pas déjà
+        for REPO in $REPOS; do
+          FILE="_projects/$REPO.md"
+          
+          # Vérifier si le fichier n'existe pas déjà
+          if [ ! -f "$FILE" ]; then
+            echo "Création de $FILE"
+            # Créer le fichier avec un contenu de base
+            echo "# $REPO" > "$FILE"
+            echo "Description du projet : $REPO" >> "$FILE"
+          else
+            echo "Le fichier $FILE existe déjà."
+          fi
+        done
 
-      - name: Create Project Pages if not exists
-        run: |
-          # Loop through each repo name from the list
-          while read repo; do
-            # Path where the project .md file should be
-            project_file="_projects/${repo}.md"
-
-            # Check if the file already exists
-            if [ ! -f "$project_file" ]; then
-              # File does not exist, create it
-              echo "---" > "$project_file"
-              echo "layout: project" >> "$project_file"
-              echo "title: $repo" >> "$project_file"
-              echo "permalink: /projects/$repo" >> "$project_file"
-              echo "" >> "$project_file"
-              echo "description: >" >> "$project_file"
-              echo "  This is a project page for $repo." >> "$project_file"
-              echo "---" >> "$project_file"
-              echo "" >> "$project_file"
-            else
-              echo "$project_file already exists, skipping creation."
-            fi
-          done < temp/repos_list.txt
-
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add _projects/*.md
-          git commit -m "Auto-create project pages if not already present" || exit 0
-          git push
+    - name: Commit and push changes
+      run: |
+        git add _projects/
+        git commit -m "Ajout des fichiers .md pour les repos"
+        git push
