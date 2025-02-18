@@ -13,6 +13,8 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
+Hi there! <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="29px" height="29px">
+
 🎓 I'm Florian Pasco, a **Master’s student in Engineering** specializing in **Electronics, Computer Science, and Mechatronics**.  
 
 👨‍💻 I am passionate about creating and sharing **open-source projects** that are reusable and easy to understand, helping others grow in the fields of **electronics, programming, and mechanics**.  
