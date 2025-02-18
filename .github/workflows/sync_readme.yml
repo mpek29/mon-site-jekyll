@@ -31,11 +31,6 @@ jobs:
         run: |
           mkdir -p _pages
           
-<<<<<<< HEAD
-          sed -n '/Hi there!/,/sensor for precise regulation./p'temp/README.md >> _pages/about.md
-          echo "" >> _pages/about.md
-
-=======
           # Création de la structure de about.md
           cat <<EOF > _pages/about.md
           ---
@@ -58,7 +53,6 @@ jobs:
           # Ajouter la section du README.md nettoyé
           sed -n '/Hi there!/,/sensor for precise regulation./p' temp/README.md >> _pages/about.md
           
->>>>>>> e2bd3660b44180afc45e74d5d9276a5ee74cf925
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
