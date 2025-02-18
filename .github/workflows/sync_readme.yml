@@ -19,6 +19,14 @@ jobs:
           curl -f -o temp/README.md https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
           if [ $? -ne 0 ]; then echo "Failed to download README.md"; exit 1; fi
 
+      - name: Clean README.md (remove specific content and Markdown headers)
+        run: |
+          # Supprimer la phrase "🚀 About Me"
+          sed -i '/🚀 About Me/d' temp/README.md
+
+          # Supprimer tous les titres Markdown en supprimant les "#"
+          sed -i 's/^#* //g' temp/README.md
+
       - name: Convert README.md to about.md
         run: |
           mkdir -p _pages
@@ -42,7 +50,7 @@ jobs:
           
           EOF
           
-          # Ajouter la section du README.md
+          # Ajouter la section du README.md nettoyé
           sed -n '/Hi there!/,/sensor for precise regulation./p' temp/README.md >> _pages/about.md
           
       - name: Commit and push changes
