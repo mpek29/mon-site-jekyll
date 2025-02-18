@@ -1,22 +1,53 @@
-name: List Repositories
+name: Update Project Pages from External Repositories
 
 on:
-  push:
-    branches:
-      - main  # ou la branche de votre choix
-  workflow_dispatch:  # Permet de déclencher manuellement l'action
+  schedule:
+    - cron: '0 12 * * *' # Exécute tous les jours à midi
+  workflow_dispatch: # Permet de le lancer manuellement
 
 jobs:
-  list_repositories:
+  update-project-pages:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: List repositories
-      run: |
-        echo "Listing repositories..."
-        curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-             -H "Accept: application/vnd.github.v3+json" \
-             https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name'
+      - name: Download list of repositories from external source
+        run: |
+          mkdir -p temp
+          # Suppose we get a list of repositories (you peux ajuster ici selon ta source de repos)
+          curl -f -o temp/repos_list.txt https://raw.githubusercontent.com/mpek29/MPek29/master/repos_list.txt
+          if [ $? -ne 0 ]; then echo "Failed to download repos list"; exit 1; fi
+
+      - name: Create Project Pages if not exists
+        run: |
+          # Loop through each repo name from the list
+          while read repo; do
+            # Path where the project .md file should be
+            project_file="_projects/${repo}.md"
+
+            # Check if the file already exists
+            if [ ! -f "$project_file" ]; then
+              # File does not exist, create it
+              echo "---" > "$project_file"
+              echo "layout: project" >> "$project_file"
+              echo "title: $repo" >> "$project_file"
+              echo "permalink: /projects/$repo" >> "$project_file"
+              echo "" >> "$project_file"
+              echo "description: >" >> "$project_file"
+              echo "  This is a project page for $repo." >> "$project_file"
+              echo "---" >> "$project_file"
+              echo "" >> "$project_file"
+            else
+              echo "$project_file already exists, skipping creation."
+            fi
+          done < temp/repos_list.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add _projects/*.md
+          git commit -m "Auto-create project pages if not already present" || exit 0
+          git push
