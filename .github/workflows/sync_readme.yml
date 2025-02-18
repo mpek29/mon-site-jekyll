@@ -1,32 +1,61 @@
-name: Sync README to About
+name: Update About Page from External README
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Exécute tous les jours à minuit UTC
-  push:
-    branches:
-      - main  # Exécute aussi l'action à chaque push
-  workflow_dispatch:  # Permet d'exécuter manuellement l’action
+    - cron: '0 12 * * *' # Exécute tous les jours à midi
+  workflow_dispatch: # Permet de le lancer manuellement
 
 jobs:
-  sync-readme:
+  update-about:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout du dépôt
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Télécharger le README.md
+      - name: Download README.md from external repo
         run: |
-          curl -o README.tmp https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
+          mkdir -p temp
+          curl -o temp/README.md https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
 
-      - name: Fusionner l'en-tête YAML de about.md avec le README
+      - name: Convert README.md to about.md
         run: |
-          awk '/^---$/{i++} i<2' about.md > about_tmp.md  # Garde l'en-tête YAML
-          echo "" >> about_tmp.md  # Ajoute une ligne vide
-          cat README.tmp >> about_tmp.md  # Ajoute le contenu du README
-          mv about_tmp.md about.md  # Remplace le fichier original
+          mkdir -p _pages
+          echo "---" > _pages/about.md
+          echo "layout: about" >> _pages/about.md
+          echo "title: À propos" >> _pages/about.md
+          echo "permalink: /" >> _pages/about.md
+          echo "" >> _pages/about.md
+          echo "profile:" >> _pages/about.md
+          echo "  align: right" >> _pages/about.md
+          echo "  image: flo_pic.png" >> _pages/about.md
+          echo "  image_circular: false" >> _pages/about.md
+          echo "" >> _pages/about.md
+          echo "news: false" >> _pages/about.md
+          echo "selected_papers: false" >> _pages/about.md
+          echo "social: true" >> _pages/about.md
+          echo "---" >> _pages/about.md
+          echo "" >> _pages/about.md
+          
+          echo "### 👋 Bienvenue !" >> _pages/about.md
+          echo "Je suis **Florian Pasco**, étudiant en ingénierie passionné par l'électronique, la programmation et la mécatronique." >> _pages/about.md
+          echo "" >> _pages/about.md
+          
+          echo "### 🚀 À propos de moi" >> _pages/about.md
+          sed -n '/## 🚀 About Me/,/## 🛠️ Skills/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
+          echo "" >> _pages/about.md
 
-      - name: Vérifier et pousser les modifications
+          echo "### 🛠️ Compétences" >> _pages/about.md
+          sed -n '/## 🛠️ Skills/,/## 📚 Featured Projects/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
+          echo "" >> _pages/about.md
+          
+          echo "### 🔗 Liens" >> _pages/about.md
+          echo "[GitHub](https://github.com/MPek29) | [LinkedIn](https://www.linkedin.com/in/florian-pasco-7ab589244/) | [Portfolio](https://mpek29.github.io/en/)" >> _pages/about.md
+
+      - name: Commit and push changes
         run: |
-          git diff --quiet && exit 0 || (git config --global user.email "github-actions@github.com" && git config --global user.name "GitHub Actions" && git add about.md && git commit -m "Mise à jour automatique de about.md" && git push)
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add _pages/about.md
+          git commit -m "Auto-update about.md from external README.md" || exit 0
+          git push
