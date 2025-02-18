@@ -16,30 +16,49 @@ jobs:
       - name: Download README.md from external repo
         run: |
           mkdir -p temp
-          curl -o temp/README.md https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
+          curl -f -o temp/README.md https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
+          if [ $? -ne 0 ]; then echo "Failed to download README.md"; exit 1; fi
+
+      - name: Clean README.md (remove specific content and Markdown headers)
+        run: |
+          # Supprimer la phrase "🚀 About Me"
+          sed -i '/🚀 About Me/d' temp/README.md
+
+          # Supprimer tous les titres Markdown en supprimant les "#"
+          sed -i 's/^#* //g' temp/README.md
 
       - name: Convert README.md to about.md
         run: |
           mkdir -p _pages
-          echo "---" > _pages/about.md
-          echo "layout: about" >> _pages/about.md
-          echo "title: À propos" >> _pages/about.md
-          echo "permalink: /" >> _pages/about.md
-          echo "" >> _pages/about.md
-          echo "profile:" >> _pages/about.md
-          echo "  align: right" >> _pages/about.md
-          echo "  image: flo_pic.png" >> _pages/about.md
-          echo "  image_circular: false" >> _pages/about.md
-          echo "" >> _pages/about.md
-          echo "news: false" >> _pages/about.md
-          echo "selected_papers: false" >> _pages/about.md
-          echo "social: true" >> _pages/about.md
-          echo "---" >> _pages/about.md
-          echo "" >> _pages/about.md
           
+<<<<<<< HEAD
           sed -n '/Hi there!/,/sensor for precise regulation./p'temp/README.md >> _pages/about.md
           echo "" >> _pages/about.md
 
+=======
+          # Création de la structure de about.md
+          cat <<EOF > _pages/about.md
+          ---
+          layout: about
+          title: À propos
+          permalink: /
+          
+          profile:
+            align: right
+            image: flo_pic.png
+            image_circular: false
+          
+          news: false
+          selected_papers: false
+          social: true
+          ---
+          
+          EOF
+          
+          # Ajouter la section du README.md nettoyé
+          sed -n '/Hi there!/,/sensor for precise regulation./p' temp/README.md >> _pages/about.md
+          
+>>>>>>> e2bd3660b44180afc45e74d5d9276a5ee74cf925
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"

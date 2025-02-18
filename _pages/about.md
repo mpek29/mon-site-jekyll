@@ -26,4 +26,8 @@ Hi there! <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" 
 
 ⛺ I love traveling and discovering new places—whether it's **hiking**, **biking**, or going on **road trips in my car**!  
 
+<<<<<<< HEAD
 🎯 I’ve also applied my skills in **reverse engineering**, successfully diagnosing and repairing **20+ electronic units**. Additionally, I designed and worked on a **thermal resistance control board** with feedback from a thermal resistance sensor for precise regulation.  
+=======
+🎯 I’ve also applied my skills in **reverse engineering**, successfully diagnosing and repairing **20+ electronic units**. Additionally, I designed and worked on a **thermal resistance control board** with feedback from a thermal resistance sensor for precise regulation.  
+>>>>>>> e2bd3660b44180afc45e74d5d9276a5ee74cf925
