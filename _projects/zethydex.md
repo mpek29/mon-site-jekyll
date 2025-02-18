@@ -1,30 +1,42 @@
 ---
 layout: page
-title: Z'EthyDex
-description: Application Android Open-Source en Kotlin
-img: assets/img/projects/zethydex/main.jpg
+title: AMS1117DC3V3
+description: Open-source reverse-engineered AMS1117 3.3V DC-DC buck converter for learning and custom hardware projects. 
+img: assets/img/projects/AMS1117DC3V3/main.png
 importance: 1
-git: https://github.com/mpek29/ZEthyDex
-<!-- store: https://play.google.com/store/apps/details?id=fr.mpek29.zethydex -->
-category: 2022
+git: https://github.com/mpek29/AMS1117DC3V3
+category: 2025
 ---
 
-Durant mon été 2022, je me suis fixé comme objectif de réaliser ma première application mobile à l'aide d'Android Studio.
+## 🚀 Overview
+An open-source reverse-engineered version of the AMS1117 3.3V DC-DC buck converter module, based on the original component available [here](https://fr.aliexpress.com/item/1005006783027108.html).  
+This project aims to provide insights into DC-DC voltage regulation and offer a customizable alternative for power management in embedded systems.
 
-J'ai donc grâce à Android Studio réalisé cette application avec le langage Kotlin et en utilisant SQLite afin de stocker toutes ses données.
+## 🎯 Purpose
+- 🔍 **Reverse engineering**: Understanding the design and functionality of the AMS1117-based voltage regulator.
+- 🛠️ **Skill development**: Enhancing expertise in PCB design and power electronics.
+- 🔄 **Future adaptation**: Leveraging this knowledge to develop custom voltage regulation solutions for embedded applications.
 
-Cette application est un utilitaire dans lequel on peut créer un mini profil pour chacun de nos amis un peu comme dans un PokéDex ! Le but étant d'enregistrer des informations sur nos amis (notamment leurs appartements et leurs boissons préférées afin de leur en offrir à l'occasion d'un passage chez eux).
+## 📝 Features Comparison: Original vs. Reverse-Engineered
 
-Cette application a été disponible sur le PlayStore par le passé. Malheureusement, mon compte développeur a été fermé pour cause d'inactivité et je ne souhaite pas engager d'autres frais pour le moment.
+| Feature            | Original Module | Reverse-Engineered Version |
+|--------------------|----------------|---------------------------|
+| 🖥️ PCB Design        | Proprietary     | Open-source & customizable |
+| 🔌 Input Voltage    | 4.8V - 15V       | 4.8V - 15V |
+| ⚡ Output Voltage   | 3.3V (fixed)     | 3.3V (fixed) |
+| 📦 Max Current     | 1500 mA            | 1500 mA |
+| 🏷️ Regulator Chip  | AMS1117-3.3      | AMS1117-3.3 |
+| 👐 Mechanical Drawing  | <img src="assets/img/projects/AMS1117DC3V3/original_pcb.png" width="300" height="300"> | <img src="assets/img/projects/AMS1117DC3V3/reversed_pcb.png" width="300" height="300"> |
+| 📝 Reverse-Engineered Schematic | N/A | <img src="assets/img/projects/AMS1117DC3V3/reversed_sch.png" width="300" height="300"> |
+| 📷 Photo             | <img src="assets/img/projects/AMS1117DC3V3/original_3d_high.png" width="300" height="300"> | <img src="assets/img/projects/AMS1117DC3V3/reversed_3d.png" width="300" height="300"> |
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/projects/zethydex/1.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/projects/zethydex/2.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/projects/zethydex/3.jpg" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
+## 🛠️ How to Use
+### 📌 Wiring Guide
+| Pin  | Description |
+|------|-------------|
+| VIN  | Input Voltage (4.8V - 15V) |
+| GND  | Ground |
+| VOUT | Regulated 3.3V Output |
+
+## 🌟 License
+This project is open-source. Feel free to use, modify, and contribute! 🚀
