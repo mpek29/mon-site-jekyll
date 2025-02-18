@@ -37,18 +37,22 @@ jobs:
           echo "---" >> _pages/about.md
           echo "" >> _pages/about.md
           
+          # Ajout de l'introduction (sans "Hi there!" et autres éléments inutiles)
           echo "### 👋 Bienvenue !" >> _pages/about.md
-          echo "Je suis **Florian Pasco**, étudiant en ingénierie passionné par l'électronique, la programmation et la mécatronique." >> _pages/about.md
-          echo "" >> _pages/about.md
-          
-          echo "### 🚀 À propos de moi" >> _pages/about.md
-          sed -n '/## 🚀 About Me/,/## 🛠️ Skills/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
+          sed -n '/🎓 I.m Florian Pasco/,/🔧 Recently, I developed/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
           echo "" >> _pages/about.md
 
-          echo "### 🛠️ Compétences" >> _pages/about.md
-          sed -n '/## 🛠️ Skills/,/## 📚 Featured Projects/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
+          # Ajout de la section À propos (About Me)
+          echo "### 🚀 À propos de moi" >> _pages/about.md
+          sed -n '/🔧 Recently, I developed/,/⛺ I love traveling/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
           echo "" >> _pages/about.md
-          
+
+          # Ajout de la section Compétences (Skills)
+          echo "### 🛠️ Compétences" >> _pages/about.md
+          sed -n '/#### 🛠️ Skills/,/#### 📚 Featured Projects/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' | sed '/#### 📚 Featured Projects/d' >> _pages/about.md
+          echo "" >> _pages/about.md
+
+          # Ajout des liens
           echo "### 🔗 Liens" >> _pages/about.md
           echo "[GitHub](https://github.com/MPek29) | [LinkedIn](https://www.linkedin.com/in/florian-pasco-7ab589244/) | [Portfolio](https://mpek29.github.io/en/)" >> _pages/about.md
 
