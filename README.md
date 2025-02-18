@@ -1,19 +1,11 @@
-# Welcome to My Portfolio
+Bonjour,
 
-Hello! My name is **Florian Pasco**, and I’m a **Master’s student in Engineering** specializing in **Electronics, Computer Science, and Mechatronics** at the Brest National School of Engineering in France.
+Je m'appelle Florian Pasco, je suis un élève-ingénieur généraliste système en électronique, informatique et mécatronique spécialisé en systèmes embarqués en cours de formation au sein de l’École Nationale d'Ingénieurs de Brest (ENIB).
 
-I am passionate about **technology, innovation, and problem-solving**. Throughout my studies and personal projects, I have developed expertise in **electronics, programming, and mechanics**, working on a wide range of technical challenges. My portfolio showcases the projects I’ve undertaken—either individually or collaboratively—highlighting my skills in **embedded systems, web development, and reverse engineering**.
+Je vous souhaite la bienvenue sur mon portfolio présentant de nombreux projets que j'ai pu faire seul ou avec des collègues par le passé. Ce portfolio a pour but de faire un état des lieux assez clairs de mes compétences. Il permet, également, d'être redirigé vers les diverses pages web et/ou documents liés (page github ou notice technique notamment) à ces projets.
 
-## 💡 What I Do:
-- Develop **open-source projects** that are reusable, well-documented, and easy to understand.
-- Build **full-stack applications** using **React, Next.js, Django, Python, and PostgreSQL**.
-- Work on **hardware design and reverse engineering**, having successfully diagnosed and repaired **20+ electronic units**.
-- Create **control systems**, such as a **thermal resistance control board** with sensor feedback for precise temperature regulation.
+En-dehors du monde de la technologie, j'apprécie me perfectionner de diverses manières. Mes passe-temps vont de la course à pied à d'autres plus sociaux comme la participation à plusieurs associations.
 
-Beyond technology, I am constantly learning through **self-training, personal development**, and research—particularly from the **French Polar Institute**. I also enjoy **repairing objects**, engaging in social activities, and taking part in various associations.
+Je m'intéresse également à des livres ou reportages sur l'Institut polaire français, l'auto-formation, le développement personnel et la réparation d'objets.
 
-## 🌍 Outside of Engineering:
-I love to travel and explore, whether it’s **hiking, biking, or embarking on road trips** in my car. I'm always eager to discover new places, gain new experiences, and push my limits.
-
-## 🔗 Explore My Work:
-Feel free to browse my portfolio to see my projects, access documentation, and check out my contributions to the tech community!
+J'adore voyager et découvrir de nouvelles choses. À la fois dans un rayon proche à pied et à vélo, mais aussi en expédition avec ma chère Peugeot 207!
