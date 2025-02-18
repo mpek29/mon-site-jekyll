@@ -37,20 +37,8 @@ jobs:
           echo "---" >> _pages/about.md
           echo "" >> _pages/about.md
           
-          echo "### 👋 Bienvenue !" >> _pages/about.md
-          echo "Je suis **Florian Pasco**, étudiant en ingénierie passionné par l'électronique, la programmation et la mécatronique." >> _pages/about.md
+          sed -n '/Hi there!/,/sensor for precise regulation./p'temp/README.md >> _pages/about.md
           echo "" >> _pages/about.md
-          
-          echo "### 🚀 À propos de moi" >> _pages/about.md
-          sed -n '/## 🚀 About Me/,/## 🛠️ Skills/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
-          echo "" >> _pages/about.md
-
-          echo "### 🛠️ Compétences" >> _pages/about.md
-          sed -n '/## 🛠️ Skills/,/## 📚 Featured Projects/p' temp/README.md | sed 's/^## /### /' | sed 's/^### /#### /' >> _pages/about.md
-          echo "" >> _pages/about.md
-          
-          echo "### 🔗 Liens" >> _pages/about.md
-          echo "[GitHub](https://github.com/MPek29) | [LinkedIn](https://www.linkedin.com/in/florian-pasco-7ab589244/) | [Portfolio](https://mpek29.github.io/en/)" >> _pages/about.md
 
       - name: Commit and push changes
         run: |

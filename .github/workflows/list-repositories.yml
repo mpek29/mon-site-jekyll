@@ -1,0 +1,22 @@
+name: List Repositories
+
+on:
+  push:
+    branches:
+      - main  # ou la branche de votre choix
+  workflow_dispatch:  # Permet de déclencher manuellement l'action
+
+jobs:
+  list_repositories:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: List repositories
+      run: |
+        echo "Listing repositories..."
+        curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+             -H "Accept: application/vnd.github.v3+json" \
+             https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name'

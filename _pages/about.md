@@ -6,14 +6,15 @@ permalink: /
 profile:
   align: right
   image: flo_pic.png
-  image_circular: false # crops the image to make it circular
+  image_circular: false
 
-news: false  # includes a list of news items
-selected_papers: false # includes a list of papers marked as "selected={true}"
-social: true  # includes social icons at the bottom of the page
+news: false
+selected_papers: false
+social: true
 ---
 
 Hi there! <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="29px" height="29px">
+
 
 🎓 I'm Florian Pasco, a **Master’s student in Engineering** specializing in **Electronics, Computer Science, and Mechatronics**.  
 
@@ -25,4 +26,4 @@ Hi there! <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" 
 
 ⛺ I love traveling and discovering new places—whether it's **hiking**, **biking**, or going on **road trips in my car**!  
 
-🎯 I’ve also applied my skills in **reverse engineering**, successfully diagnosing and repairing **20+ electronic units**. Additionally, I designed and worked on a **thermal resistance control board** with feedback from a thermal resistance sensor for precise regulation.
+🎯 I’ve also applied my skills in **reverse engineering**, successfully diagnosing and repairing **20+ electronic units**. Additionally, I designed and worked on a **thermal resistance control board** with feedback from a thermal resistance sensor for precise regulation.  
