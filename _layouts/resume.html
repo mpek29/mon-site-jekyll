@@ -2,6 +2,8 @@
 layout: default
 ---
 
-<meta http-equiv="refresh" content="0; url={{ page.pdf | prepend: 'assets/pdf/' | relative_url }}">
+<script>
+  window.location.replace("{{ page.pdf | prepend: 'assets/pdf/' | relative_url }}");
+</script>
 
-<p>Si vous n'êtes pas redirigé automatiquement, <a href="{{ page.pdf | prepend: 'assets/pdf/' | relative_url }}">cliquez ici</a>.</p>
+<p>If you are not automatically redirected, <a href="{{ page.pdf | prepend: 'assets/pdf/' | relative_url }}">click here</a>.</p>
