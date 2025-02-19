@@ -54,6 +54,13 @@ jobs:
         # Parcourir la liste des repos et télécharger les images
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
+
+          # Ignorer le dépôt "MPek29"
+          if [ "$title" == "MPek29" ]; then
+            echo "⚠️ Dépôt 'MPek29' ignoré."
+            continue
+          fi
+
           repo_url=$(echo "$repo" | jq -r '.url')
           repo_name=$(basename "$repo_url")  # Récupérer uniquement le nom du repo
 
@@ -91,6 +98,13 @@ jobs:
         # Lire la liste de dictionnaires et générer les fichiers Markdown
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
+
+          # Ignorer le dépôt "MPek29"
+          if [ "$title" == "MPek29" ]; then
+            echo "⚠️ Dépôt 'MPek29' ignoré pour la création des fichiers Markdown."
+            continue
+          fi
+
           description=$(echo "$repo" | jq -r '.description')
           url=$(echo "$repo" | jq -r '.url')  # Récupérer l'URL
 
