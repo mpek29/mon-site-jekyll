@@ -2,7 +2,7 @@
 layout: page
 title: en
 description: A website created using Jekyll and the "al-folio" theme that i have created to list my projects. 
-img: assets/img/en/main.png
+img: assets/img/projects/AMS1117DC3V3/main.png
 importance: 1
 git: https://github.com/mpek29/en
 category: 2025
