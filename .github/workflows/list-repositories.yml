@@ -70,8 +70,8 @@ jobs:
 
           if echo "$FILES_JSON" | jq -e 'if type == "array" then true else false end' > /dev/null; then
             DEST_FOLDER="assets/img/projects/$title"
-            mkdir -p "$DEST_FOLDER"
-            rm -rf "$DEST_FOLDER/*"  
+            rm -rf "$DEST_FOLDER"
+            mkdir -p "$DEST_FOLDER"           
 
             echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
               echo "📥 Téléchargement : $file_url"
@@ -93,8 +93,9 @@ jobs:
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
 
-          if [ "$title" == "MPek29" ]; then
-            echo "⚠️ Dépôt 'MPek29' ignoré pour la création des fichiers Markdown."
+          # Vérifie si le dépôt doit être ignoré
+          if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" ]]; then
+            echo "⚠️ Dépôt '$title' ignoré pour la création des fichiers Markdown."
             continue
           fi
 
