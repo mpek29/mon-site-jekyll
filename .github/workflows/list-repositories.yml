@@ -21,27 +21,46 @@ jobs:
       run: |
         echo "Fetching repository list..."
         
-        # Récupération des données via l'API GitHub
+        # Récupérer les données via l'API GitHub
         REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3+json" \
                             https://api.github.com/users/mpek29/repos?type=all)
+        
+        # Vérifier si la réponse de l'API contient une erreur
+        if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
+          echo "❌ Erreur lors de la récupération des repos :"
+          echo "$REPOS_JSON"
+          exit 1  # Arrête le workflow en cas d'erreur
+        fi
 
-        # Transformation en liste de dictionnaires (nom + description)
+        # Transformer en liste de dictionnaires (nom + description)
         REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available")}]')
 
-        # Stockage de la liste sous forme de variable d'environnement
+        # Vérifier si la liste est vide
+        if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
+          echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
+          exit 1
+        fi
+
+        # Stocker dans une variable d'environnement
         echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
     # Create Markdown files for each repository in the _projects folder
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
-        mkdir -p _projects  # Create _projects directory if it doesn't exist
+        mkdir -p _projects  # Créer le dossier _projects s'il n'existe pas
 
         # Lire la liste de dictionnaires et générer les fichiers Markdown
-        echo "$REPOS_LIST" | jq -c '.[]' | while read repo; do
+        echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
           description=$(echo "$repo" | jq -r '.description')
+
+          # Vérifier que le titre n'est pas vide
+          if [ -z "$title" ]; then
+            echo "⚠️ Un dépôt sans nom détecté, il sera ignoré."
+            continue
+          fi
 
           # Préparer le contenu Markdown
           markdown_content="---\n"
@@ -54,7 +73,7 @@ jobs:
 
           # Écrire dans le fichier
           echo -e "$markdown_content" > "_projects/$title.md"
-          echo "Created _projects/$title.md"
+          echo "✅ Created _projects/$title.md"
         done
 
     # Optional: Stage the changes and commit them
@@ -66,4 +85,4 @@ jobs:
         git commit -m "Add Markdown files for repositories" || echo "No changes to commit"
         git push origin master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token to authenticate
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du token GitHub pour authentification
