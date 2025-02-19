@@ -38,19 +38,20 @@ jobs:
             repo_url="${repos[i+2]}"
             importance=$((i / 3 + 1))  # Set importance based on the order in the list
 
-            # Create the Markdown file with the specified content
-            cat <<EOF > "_projects/$repo_name.md"
----
-layout: page
-title: $repo_name
-description: $repo_description
-img: assets/img/projects/${repo_name// /_}/main.png  # Replace spaces with underscores for image path
-importance: $importance
-git: $repo_url
-category: 2025
----
-EOF
-            echo "Created _projects/$repo_name.md"
+            # Prepare the Markdown content
+            markdown_content="---\n"
+            markdown_content+="layout: page\n"
+            markdown_content+="title: $repo_name\n"
+            markdown_content+="description: ${repo_description:-No description available}\n"
+            markdown_content+="img: assets/img/projects/${repo_name// /_}/main.png\n"  # Replace spaces with underscores for image path
+            markdown_content+="importance: $importance\n"
+            markdown_content+="git: $repo_url\n"
+            markdown_content+="category: 2025\n"
+            markdown_content+="---\n"
+
+            # Write the content to the Markdown file
+            echo -e "$markdown_content" > "_projects/${repo_name// /_}.md"
+            echo "Created _projects/${repo_name// /_}.md"
           done
 
       # Optional: Stage the changes and commit them
