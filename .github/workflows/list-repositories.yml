@@ -3,17 +3,19 @@ name: List Repositories
 on:
   push:
     branches:
-      - master
-  workflow_dispatch:
+      - master  # Trigger workflow on push to the master branch
+  workflow_dispatch:  # Allow manual execution of the workflow
 
 jobs:
   list_repositories:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Fetch the list of repositories with names, descriptions, and URLs
     - name: Store repositories in a variable
       id: list_repositories
       run: |
@@ -21,47 +23,55 @@ jobs:
         
         REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3+json" \
-                            https://api.github.com/user/repos?type=all)
-
+                            https://api.github.com/users/mpek29/repos?type=all)
+        
         if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
           echo "❌ Erreur lors de la récupération des repos :"
           echo "$REPOS_JSON"
           exit 1
         fi
 
-        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {owner: .owner.login, title: .name, description: (.description // "No description available"), url: .html_url}]')
+        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url}]')
 
         if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
-          echo "❌ Aucun dépôt trouvé."
+          echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
           exit 1
         fi
 
         echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
+    # Download images from each repository
     - name: Download repository images
       run: |
         echo "Downloading images from each repository..."
-        mkdir -p assets/img/projects
+        mkdir -p assets/img/projects  
 
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
-          owner=$(echo "$repo" | jq -r '.owner')  
-          repo_name=$(echo "$repo" | jq -r '.title')
 
           if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ]; then
             echo "⚠️ Dépôt '$title' ignoré."
             continue
           fi
 
-          API_URL="https://api.github.com/repos/$owner/$repo_name/contents/assets/img"
+          repo_url=$(echo "$repo" | jq -r '.url')
+          repo_name=$(basename "$repo_url")
+
+          API_URL="https://api.github.com/repos/mpek29/$repo_name/contents/assets/img"
 
           FILES_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                               -H "Accept: application/vnd.github.v3+json" "$API_URL")
 
+          if echo "$FILES_JSON" | jq -e 'has("message") and .message | contains("Not Found")' > /dev/null; then
+            echo "🚨 Impossible de récupérer les images pour '$title'. Ajout manuel nécessaire."
+            touch "assets/img/projects/$title/MANUAL_DOWNLOAD_REQUIRED"
+            continue
+          fi
+
           if echo "$FILES_JSON" | jq -e 'if type == "array" then true else false end' > /dev/null; then
             DEST_FOLDER="assets/img/projects/$title"
             mkdir -p "$DEST_FOLDER"
-            rm -rf "$DEST_FOLDER/*"  # Supprime les images existantes
+            rm -rf "$DEST_FOLDER/*"  
 
             echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
               echo "📥 Téléchargement : $file_url"
@@ -74,13 +84,20 @@ jobs:
           fi
         done
 
+    # Create Markdown files for each repository in the _projects folder
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
-        mkdir -p _projects
+        mkdir -p _projects  
 
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
+
+          if [ "$title" == "MPek29" ]; then
+            echo "⚠️ Dépôt 'MPek29' ignoré pour la création des fichiers Markdown."
+            continue
+          fi
+
           description=$(echo "$repo" | jq -r '.description')
           url=$(echo "$repo" | jq -r '.url')
 
@@ -91,7 +108,15 @@ jobs:
 
           img_path="assets/img/projects/$title/main.png"
           if [ ! -f "$img_path" ]; then
-            img_path="assets/img/projects/default.png"
+            if [ -f "assets/img/projects/$title/MANUAL_DOWNLOAD_REQUIRED" ]; then
+              img_path="assets/img/projects/manual.png"  
+              manual_note="\n\n⚠️ **Les images pour ce projet doivent être ajoutées manuellement.**"
+            else
+              img_path="assets/img/projects/default.png"  
+              manual_note=""
+            fi
+          else
+            manual_note=""
           fi
 
           markdown_content="---\n"
@@ -103,11 +128,13 @@ jobs:
           markdown_content+="git: $url\n"
           markdown_content+="category: 2025\n"
           markdown_content+="---\n\n"
+          markdown_content+="$manual_note\n"
 
           echo -e "$markdown_content" > "_projects/$title.md"
           echo "✅ Created _projects/$title.md"
         done
 
+    # Commit and push changes
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
