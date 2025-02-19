@@ -57,11 +57,15 @@ jobs:
           repo_url=$(echo "$repo" | jq -r '.url')
           repo_name=$(basename "$repo_url")  # Récupérer uniquement le nom du repo
 
-          # Vérifier si le dossier d'images existe
-          IMG_PATH="https://github.com/mpek29/$repo_name/raw/master/assets/img/"
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$IMG_PATH")
+          # Définir l'URL de l'API GitHub pour récupérer le contenu du dossier
+          API_URL="https://api.github.com/repos/mpek29/$repo_name/contents/assets/img"
+          
+          # Récupérer la liste des fichiers (on suppose que les images sont stockées sous assets/img/)
+          FILES_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                              -H "Accept: application/vnd.github.v3+json" "$API_URL")
 
-          if [ "$STATUS_CODE" -ne 200 ]; then
+          # Vérifier si le dossier existe (sinon, la requête renvoie un message d'erreur)
+          if echo "$FILES_JSON" | jq -e 'has("message")' > /dev/null; then
             echo "⚠️ Pas d'images trouvées pour $title, il sera ignoré."
             continue
           fi
@@ -70,9 +74,11 @@ jobs:
           DEST_FOLDER="assets/img/projects/$title"
           mkdir -p "$DEST_FOLDER"
 
-          # Télécharger les images
-          echo "📥 Téléchargement des images pour $title..."
-          wget -q -r -np -nH --cut-dirs=3 -A "*.png,*.jpg,*.jpeg,*.gif" -P "$DEST_FOLDER" "$IMG_PATH"
+          # Télécharger chaque image
+          echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
+            echo "📥 Téléchargement : $file_url"
+            wget -q -P "$DEST_FOLDER" "$file_url"
+          done
 
           echo "✅ Images enregistrées dans $DEST_FOLDER"
         done
