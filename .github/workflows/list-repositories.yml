@@ -15,34 +15,46 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Fetch the list of repositories for the user "mpek29" and store it in a variable
+    # Fetch the list of repositories with names and descriptions
     - name: Store repositories in a variable
       id: list_repositories
       run: |
         echo "Fetching repository list..."
-        REPO_LIST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                          -H "Accept: application/vnd.github.v3+json" \
-                          https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name' | tr '\n' ' ')
-        echo "REPO_LIST=$REPO_LIST" >> $GITHUB_ENV  # Store in environment variable for later steps
+        
+        # Récupération des données via l'API GitHub
+        REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                            -H "Accept: application/vnd.github.v3+json" \
+                            https://api.github.com/users/mpek29/repos?type=all)
+
+        # Transformation en liste de dictionnaires (nom + description)
+        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available")}]')
+
+        # Stockage de la liste sous forme de variable d'environnement
+        echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
     # Create Markdown files for each repository in the _projects folder
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
-        IFS=' ' read -r -a repos <<< "$REPO_LIST"  # Convert REPO_LIST to an array
         mkdir -p _projects  # Create _projects directory if it doesn't exist
-        for repo in "${repos[@]}"; do
-          # Prepare the Markdown content
+
+        # Lire la liste de dictionnaires et générer les fichiers Markdown
+        echo "$REPOS_LIST" | jq -c '.[]' | while read repo; do
+          title=$(echo "$repo" | jq -r '.title')
+          description=$(echo "$repo" | jq -r '.description')
+
+          # Préparer le contenu Markdown
           markdown_content="---\n"
           markdown_content+="layout: page\n"
-          markdown_content+="title: $repo\n"
+          markdown_content+="title: $title\n"
           markdown_content+="category: 2025\n"
           markdown_content+="---\n\n"
-          markdown_content+="# $repo\n"
+          markdown_content+="# $title\n\n"
+          markdown_content+="$description\n"
 
-          # Write to file
-          echo -e "$markdown_content" > "_projects/$repo.md"
-          echo "Created _projects/$repo.md"
+          # Écrire dans le fichier
+          echo -e "$markdown_content" > "_projects/$title.md"
+          echo "Created _projects/$title.md"
         done
 
     # Optional: Stage the changes and commit them
