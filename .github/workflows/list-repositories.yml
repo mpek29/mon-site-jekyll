@@ -17,11 +17,12 @@ jobs:
 
     # Fetch the list of repositories for the user "mpek29" and store it in a variable
     - name: Store repositories in a variable
+      id: list_repositories
       run: |
         echo "Fetching repository list..."
         REPO_LIST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                           -H "Accept: application/vnd.github.v3+json" \
-                          https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name')
+                          https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name' | tr '\n' ' ')
         echo "REPO_LIST=$REPO_LIST" >> $GITHUB_ENV  # Store in environment variable for later steps
 
     # Create Markdown files for each repository in the _projects folder
@@ -41,7 +42,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add _projects/*.md
-        git commit -m "Add Markdown files for repositories"
+        git commit -m "Add Markdown files for repositories" || echo "No changes to commit"
         git push origin master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token to authenticate
