@@ -56,7 +56,7 @@ jobs:
           title=$(echo "$repo" | jq -r '.title')
 
           # Ignorer les dépôts "MPek29", "en" et "mon-site-jekyll"
-          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ]; then
+          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
             echo "⚠️ Dépôt '$title' ignoré."
             continue
           fi
