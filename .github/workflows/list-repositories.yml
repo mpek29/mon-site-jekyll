@@ -1,4 +1,4 @@
-name: Create Markdown Files for Repos
+name: List Repositories
 
 on:
   push:
@@ -7,42 +7,16 @@ on:
   workflow_dispatch:  # Permet de déclencher manuellement l'action
 
 jobs:
-  create_markdown_files:
+  list_repositories:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: List repositories and create .md files
+    - name: List repositories
       run: |
-        echo "Listing repositories and creating markdown files..."
-        
-        # Récupérer la liste des dépôts
-        REPOS=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                    -H "Accept: application/vnd.github.v3+json" \
-                    https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name')
-        
-        # Créer le dossier _projects si nécessaire
-        mkdir -p _projects
-        
-        # Créer un fichier .md pour chaque dépôt s'il n'existe pas déjà
-        for REPO in $REPOS; do
-          FILE="_projects/$REPO.md"
-          
-          # Vérifier si le fichier n'existe pas déjà
-          if [ ! -f "$FILE" ]; then
-            echo "Création de $FILE"
-            # Créer le fichier avec un contenu de base
-            echo "# $REPO" > "$FILE"
-            echo "Description du projet : $REPO" >> "$FILE"
-          else
-            echo "Le fichier $FILE existe déjà."
-          fi
-        done
-
-    - name: Commit and push changes
-      run: |
-        git add _projects/
-        git commit -m "Ajout des fichiers .md pour les repos"
-        git push
+        echo "Listing repositories..."
+        curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+             -H "Accept: application/vnd.github.v3+json" \
+             https://api.github.com/users/mpek29/repos?type=all | jq -r '.[].name'
