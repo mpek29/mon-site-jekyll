@@ -66,10 +66,12 @@ jobs:
           markdown_content="---\n"
           markdown_content+="layout: page\n"
           markdown_content+="title: $title\n"
+          markdown_content+="description: $description\n"
+          markdown_content+="img: assets/img/projects/AMS1117DC3V3/main.png\n"
+          markdown_content+="importance: 1\n"
+          markdown_content+="https://github.com/mpek29/AMS1117DC3V3"
           markdown_content+="category: 2025\n"
           markdown_content+="---\n\n"
-          markdown_content+="# $title\n\n"
-          markdown_content+="$description\n"
 
           # Écrire dans le fichier
           echo -e "$markdown_content" > "_projects/$title.md"
