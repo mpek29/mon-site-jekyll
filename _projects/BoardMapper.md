@@ -1,10 +1,10 @@
 ---
 layout: page
 title: BoardMapper
-category: 2025
+description: An automated tool for generating a component placement map on a PCB, labeling references (U1, R1, C1…) directly on the board image.
+img: assets/img/projects/AMS1117DC3V3/main.png
+importance: 1
+https://github.com/mpek29/AMS1117DC3V3category: 2025
 ---
 
-# BoardMapper
-
-An automated tool for generating a component placement map on a PCB, labeling references (U1, R1, C1…) directly on the board image.
 

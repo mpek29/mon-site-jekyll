@@ -1,10 +1,10 @@
 ---
 layout: page
 title: MicroUSB2JST
-category: 2025
+description: MicroUSB2JST is an open-source PCB that connects micro USB to JST-SH and JST-PH connectors.
+img: assets/img/projects/AMS1117DC3V3/main.png
+importance: 1
+https://github.com/mpek29/AMS1117DC3V3category: 2025
 ---
 
-# MicroUSB2JST
-
-MicroUSB2JST is an open-source PCB that connects micro USB to JST-SH and JST-PH connectors.
 
