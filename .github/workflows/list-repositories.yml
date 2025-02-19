@@ -49,7 +49,7 @@ jobs:
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
 
-          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ]; then
+          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
             echo "⚠️ Dépôt '$title' ignoré."
             continue
           fi
@@ -94,7 +94,7 @@ jobs:
           title=$(echo "$repo" | jq -r '.title')
 
           # Vérifie si le dépôt doit être ignoré
-          if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" ]]; then
+          if [ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
             echo "⚠️ Dépôt '$title' ignoré pour la création des fichiers Markdown."
             continue
           fi
