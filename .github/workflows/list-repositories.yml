@@ -59,28 +59,27 @@ jobs:
 
           # Définir l'URL de l'API GitHub pour récupérer le contenu du dossier
           API_URL="https://api.github.com/repos/mpek29/$repo_name/contents/assets/img"
-          
-          # Récupérer la liste des fichiers (on suppose que les images sont stockées sous assets/img/)
+
+          # Récupérer la liste des fichiers
           FILES_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                               -H "Accept: application/vnd.github.v3+json" "$API_URL")
 
-          # Vérifier si le dossier existe (sinon, la requête renvoie un message d'erreur)
-          if echo "$FILES_JSON" | jq -e 'has("message")' > /dev/null; then
+          # Vérifier si la réponse est un tableau (dossier valide)
+          if echo "$FILES_JSON" | jq -e 'if type == "array" then true else false end' > /dev/null; then
+            # Créer le dossier de destination
+            DEST_FOLDER="assets/img/projects/$title"
+            mkdir -p "$DEST_FOLDER"
+
+            # Télécharger chaque image
+            echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
+              echo "📥 Téléchargement : $file_url"
+              wget -q -P "$DEST_FOLDER" "$file_url"
+            done
+
+            echo "✅ Images enregistrées dans $DEST_FOLDER"
+          else
             echo "⚠️ Pas d'images trouvées pour $title, il sera ignoré."
-            continue
           fi
-
-          # Créer le dossier de destination
-          DEST_FOLDER="assets/img/projects/$title"
-          mkdir -p "$DEST_FOLDER"
-
-          # Télécharger chaque image
-          echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
-            echo "📥 Téléchargement : $file_url"
-            wget -q -P "$DEST_FOLDER" "$file_url"
-          done
-
-          echo "✅ Images enregistrées dans $DEST_FOLDER"
         done
 
     # Create Markdown files for each repository in the _projects folder
