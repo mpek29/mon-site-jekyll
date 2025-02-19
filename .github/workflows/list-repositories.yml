@@ -55,9 +55,9 @@ jobs:
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
 
-          # Ignorer le dépôt "MPek29"
-          if [ "$title" == "MPek29" ]; then
-            echo "⚠️ Dépôt 'MPek29' ignoré."
+          # Ignorer les dépôts "MPek29", "en" et "mon-site-jekyll"
+          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ]; then
+            echo "⚠️ Dépôt '$title' ignoré."
             continue
           fi
 
