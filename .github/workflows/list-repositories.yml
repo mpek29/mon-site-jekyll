@@ -15,7 +15,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Fetch the list of repositories with names and descriptions
+    # Fetch the list of repositories with names, descriptions, and URLs
     - name: Store repositories in a variable
       id: list_repositories
       run: |
@@ -33,8 +33,8 @@ jobs:
           exit 1  # Arrête le workflow en cas d'erreur
         fi
 
-        # Transformer en liste de dictionnaires (nom + description)
-        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available")}]')
+        # Transformer en liste de dictionnaires (nom + description + lien)
+        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url}]')
 
         # Vérifier si la liste est vide
         if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
@@ -55,6 +55,7 @@ jobs:
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
           description=$(echo "$repo" | jq -r '.description')
+          url=$(echo "$repo" | jq -r '.url')  # Récupérer l'URL
 
           # Vérifier que le titre n'est pas vide
           if [ -z "$title" ]; then
@@ -69,7 +70,7 @@ jobs:
           markdown_content+="description: $description\n"
           markdown_content+="img: assets/img/projects/AMS1117DC3V3/main.png\n"
           markdown_content+="importance: 1\n"
-          markdown_content+="git: https://github.com/mpek29/AMS1117DC3V3\n"
+          markdown_content+="git: $url\n"  # Utiliser l'URL pour le lien Git
           markdown_content+="category: 2025\n"
           markdown_content+="---\n\n"
 
