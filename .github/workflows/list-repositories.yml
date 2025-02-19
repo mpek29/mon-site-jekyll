@@ -21,60 +21,63 @@ jobs:
       run: |
         echo "Fetching repository list..."
         
-        # Récupérer les données via l'API GitHub
+        # Fetch data via the GitHub API
         REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3+json" \
                             https://api.github.com/users/mpek29/repos?type=all)
         
-        # Vérifier si la réponse de l'API contient une erreur
+        # Check if the API response contains an error
         if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
-          echo "❌ Erreur lors de la récupération des repos :"
+          echo "❌ Error fetching repositories:"
           echo "$REPOS_JSON"
-          exit 1  # Arrête le workflow en cas d'erreur
+          exit 1  # Stop the workflow in case of error
         fi
 
-        # Transformer en liste de dictionnaires (nom + description + lien)
+        # Transform into a list of dictionaries (name + description + URL)
         REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url}]')
 
-        # Vérifier si la liste est vide
+        # Check if the list is empty
         if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
-          echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
+          echo "❌ No repositories found for user mpek29."
           exit 1
         fi
 
-        # Stocker dans une variable d'environnement
+        # Store in an environment variable
         echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
     # Create Markdown files for each repository in the _projects folder
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
-        mkdir -p _projects  # Créer le dossier _projects s'il n'existe pas
+        mkdir -p _projects  # Create the _projects folder if it doesn't exist
 
-        # Lire la liste de dictionnaires et générer les fichiers Markdown
+        # Read the list of dictionaries and generate Markdown files
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
           description=$(echo "$repo" | jq -r '.description')
-          url=$(echo "$repo" | jq -r '.url')  # Récupérer l'URL
+          url=$(echo "$repo" | jq -r '.url')  # Retrieve the URL
 
-          # Vérifier que le titre n'est pas vide
+          # Check that the title is not empty
           if [ -z "$title" ]; then
-            echo "⚠️ Un dépôt sans nom détecté, il sera ignoré."
+            echo "⚠️ Repository without a name detected, it will be ignored."
             continue
           fi
 
-          # Préparer le contenu Markdown
+          # Prepare the image path
+          image_path="assets/img/$title/main.png"  # Update this path based on your structure
+
+          # Prepare the content for Markdown
           markdown_content="---\n"
           markdown_content+="layout: page\n"
           markdown_content+="title: $title\n"
           markdown_content+="description: $description\n"
-          markdown_content+="img: assets/img/projects/AMS1117DC3V3/main.png\n"
+          markdown_content+="img: $image_path\n"  # Use the dynamic image path
           markdown_content+="importance: 1\n"
-          markdown_content+="git: $url\n"  # Utiliser l'URL pour le lien Git
+          markdown_content+="git: $url\n"  # Use the URL for the link to Git
           markdown_content+="category: 2025\n"
           markdown_content+="---\n\n"
 
-          # Écrire dans le fichier
+          # Write to the file
           echo -e "$markdown_content" > "_projects/$title.md"
           echo "✅ Created _projects/$title.md"
         done
@@ -88,4 +91,4 @@ jobs:
         git commit -m "Add Markdown files for repositories" || echo "No changes to commit"
         git push origin master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Utilisation du token GitHub pour authentification
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub token for authentication
