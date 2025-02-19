@@ -32,7 +32,16 @@ jobs:
         IFS=' ' read -r -a repos <<< "$REPO_LIST"  # Convert REPO_LIST to an array
         mkdir -p _projects  # Create _projects directory if it doesn't exist
         for repo in "${repos[@]}"; do
-          echo "# $repo" > "_projects/$repo.md"  # Create a Markdown file with the repository name
+          # Prepare the Markdown content
+          markdown_content="---\n"
+          markdown_content+="layout: page\n"
+          markdown_content+="title: $repo\n"
+          markdown_content+="category: 2025\n"
+          markdown_content+="---\n\n"
+          markdown_content+="# $repo\n"
+
+          # Write to file
+          echo -e "$markdown_content" > "_projects/$repo.md"
           echo "Created _projects/$repo.md"
         done
 
