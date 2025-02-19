@@ -6,3 +6,5 @@ category: 2025
 
 # ZEthyDex
 
+An application wich have a concept closer to a pokédex
+
