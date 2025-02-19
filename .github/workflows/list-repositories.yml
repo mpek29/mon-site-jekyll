@@ -103,7 +103,7 @@ jobs:
           title=$(echo "$repo" | jq -r '.title')
 
           # Ignorer le dépôt "MPek29"
-          if [ "$title" == "MPek29" ]; then
+          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
             echo "⚠️ Dépôt 'MPek29' ignoré pour la création des fichiers Markdown."
             continue
           fi
