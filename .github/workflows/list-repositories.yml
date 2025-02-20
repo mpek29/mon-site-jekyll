@@ -3,19 +3,17 @@ name: List Repositories
 on:
   push:
     branches:
-      - master  # Trigger workflow on push to the master branch
-  workflow_dispatch:  # Allow manual execution of the workflow
+      - master
+  workflow_dispatch:
 
 jobs:
   list_repositories:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Fetch the list of repositories with names, descriptions, URLs, and topics
     - name: Store repositories in a variable
       id: list_repositories
       run: |
@@ -40,51 +38,6 @@ jobs:
 
         echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
-    # Download images from each repository
-    - name: Download repository images
-      run: |
-        echo "Downloading images from each repository..."
-        mkdir -p assets/img/projects  
-
-        echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
-          title=$(echo "$repo" | jq -r '.title')
-
-          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
-            echo "⚠️ Dépôt '$title' ignoré."
-            continue
-          fi
-
-          repo_url=$(echo "$repo" | jq -r '.url')
-          repo_name=$(basename "$repo_url")
-
-          API_URL="https://api.github.com/repos/mpek29/$repo_name/contents/assets/img"
-
-          FILES_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                              -H "Accept: application/vnd.github.v3+json" "$API_URL")
-
-          if echo "$FILES_JSON" | jq -e 'has("message") and .message | contains("Not Found")' > /dev/null; then
-            echo "🚨 Impossible de récupérer les images pour '$title'. Ajout manuel nécessaire."
-            touch "assets/img/projects/$title/MANUAL_DOWNLOAD_REQUIRED"
-            continue
-          fi
-
-          if echo "$FILES_JSON" | jq -e 'if type == "array" then true else false end' > /dev/null; then
-            DEST_FOLDER="assets/img/projects/$title"
-            rm -rf "$DEST_FOLDER"
-            mkdir -p "$DEST_FOLDER"           
-
-            echo "$FILES_JSON" | jq -r '.[] | select(.type == "file") | .download_url' | while read -r file_url; do
-              echo "📥 Téléchargement : $file_url"
-              wget -q -P "$DEST_FOLDER" "$file_url"
-            done
-
-            echo "✅ Images enregistrées dans $DEST_FOLDER"
-          else
-            echo "⚠️ Pas d'images trouvées pour $title, il sera ignoré."
-          fi
-        done
-
-    # Create Markdown files for each repository in the _projects folder
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
@@ -93,9 +46,8 @@ jobs:
         echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
           title=$(echo "$repo" | jq -r '.title')
 
-          # Check if the repository should be ignored
-          if [ "$title" == "MPek29" ] || [ "$title" == "en" ] || [ "$title" == "mon-site-jekyll" ] || [ "$title" == "mpek29.github.io" ]; then
-            echo "⚠️ Dépôt '$title' ignoré pour la création des fichiers Markdown."
+          if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
+            echo "⚠️ Dépôt '$title' ignoré."
             continue
           fi
 
@@ -107,22 +59,100 @@ jobs:
             continue
           fi
 
-          # Déterminer la catégorie en fonction des topics
+          # Déterminer la catégorie et la sous-catégorie
           main_topic="other"
+          subcategory="General"
+
           for topic in $(echo "$repo" | jq -r '.topics[]'); do
             case "$topic" in
-              "computer-science")
+              # Computer Science
+              "software-development")
                 main_topic="Computer Science"
-                break
+                subcategory="Software Development"
                 ;;
-              "electronics")
+
+              "firmware-development")
+                main_topic="Computer Science"
+                subcategory="Firmware Development"
+                ;;
+
+              "data-engineering")
+                main_topic="Computer Science"
+                subcategory="Data Engineering"
+                ;;
+
+              "cybersecurity")
+                main_topic="Computer Science"
+                subcategory="Cybersecurity"
+                ;;
+
+              "devops-automation")
+                main_topic="Computer Science"
+                subcategory="DevOps & Automation"
+                ;;
+
+              "artificial-intelligence")
+                main_topic="Computer Science"
+                subcategory="Artificial Intelligence"
+                ;;
+
+              # Electronics
+              "pcb-design")
                 main_topic="Electronics"
-                break
+                subcategory="PCB Design"
                 ;;
-              "mechanical-engineering")
+
+              "power-electronics")
+                main_topic="Electronics"
+                subcategory="Power Electronics"
+                ;;
+              
+              "signal-image-processing")
+                main_topic="Electronics"
+                subcategory="Signal and Image Processing"
+                ;;
+
+              "pcb-reverse-engineering")
+                main_topic="Electronics"
+                subcategory="PCB Reverse Engineering"
+                ;;
+
+              "pcb-repair")
+                main_topic="Electronics"
+                subcategory="PCB Repair"
+                ;;
+
+              "digital-electronics")
+                main_topic="Electronics"
+                subcategory="Digital Electronics"
+                ;;
+
+              # Mechanical Engineering
+              "mechanical-design")
                 main_topic="Mechanical Engineering"
-                break
+                subcategory="Mechanical Design"
                 ;;
+
+              "analysis-simulation")
+                main_topic="Mechanical Engineering"
+                subcategory="Analysis and Simulation"
+                ;;
+
+              "fluid-mechanics")
+                main_topic="Mechanical Engineering"
+                subcategory="Fluid Mechanics"
+                ;;
+
+              "materials-mechanics-materials")
+                main_topic="Mechanical Engineering"
+                subcategory="Materials and Mechanics of Materials"
+                ;;
+
+              "control-systems")
+                main_topic="Mechanical Engineering"
+                subcategory="Control Systems"
+                ;;
+              
             esac
           done
 
@@ -147,6 +177,7 @@ jobs:
           markdown_content+="importance: 1\n"
           markdown_content+="git: $url\n"
           markdown_content+="category: $main_topic\n"
+          markdown_content+="subcategory: $subcategory\n"
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n"
 
@@ -154,7 +185,6 @@ jobs:
           echo "✅ Created _projects/$title.md"
         done
 
-    # Commit and push changes
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
