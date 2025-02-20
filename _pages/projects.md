@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Projets
+title: Projects
 permalink: /projects/
-description: Voici une liste des projets que j'ai réalisés ou auxquels j'ai participé.
+description: Here's a list of projects I've completed or participated in.
 nav: true
 nav_order: 2
 display_categories: ["Electronics", "Computer Science", "Mechanical Engineering"]
