@@ -5,7 +5,7 @@ permalink: /projects/
 description: Voici une liste des projets que j'ai réalisé ou auxquels j'ai participé.
 nav: true
 nav_order: 2
-display_categories: [2025]
+display_categories: ["Computer Science", "Electronics", "Mechanical Engineering"]
 ---
 
 <!-- pages/projects.md -->

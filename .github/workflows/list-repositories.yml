@@ -15,7 +15,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Fetch the list of repositories with names, descriptions, and URLs
+    # Fetch the list of repositories with names, descriptions, URLs, and topics
     - name: Store repositories in a variable
       id: list_repositories
       run: |
@@ -31,7 +31,7 @@ jobs:
           exit 1
         fi
 
-        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url}]')
+        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
 
         if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
           echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
@@ -107,6 +107,25 @@ jobs:
             continue
           fi
 
+          # Déterminer la catégorie en fonction des topics
+          main_topic="other"
+          for topic in $(echo "$repo" | jq -r '.topics[]'); do
+            case "$topic" in
+              "computer-science")
+                main_topic="Computer Science"
+                break
+                ;;
+              "electronics")
+                main_topic="Electronics"
+                break
+                ;;
+              "mechanical-engineering")
+                main_topic="Mechanical Engineering"
+                break
+                ;;
+            esac
+          done
+
           img_path="assets/img/projects/$title/main.png"
           if [ ! -f "$img_path" ]; then
             if [ -f "assets/img/projects/$title/MANUAL_DOWNLOAD_REQUIRED" ]; then
@@ -127,7 +146,7 @@ jobs:
           markdown_content+="img: $img_path\n"
           markdown_content+="importance: 1\n"
           markdown_content+="git: $url\n"
-          markdown_content+="category: 2025\n"
+          markdown_content+="category: $main_topic\n"
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n"
 
