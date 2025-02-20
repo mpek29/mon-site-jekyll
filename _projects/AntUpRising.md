@@ -6,6 +6,7 @@ img: assets/img/projects/AntUpRising/main.png
 importance: 1
 git: https://github.com/RomainFauvel/AntUpRising
 category: other
+subcategory: General
 ---
 
 

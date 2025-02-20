@@ -5,7 +5,8 @@ description: A beautiful, simple, and clean LaTex template for ENIB students who
 img: assets/img/projects/mpek29-latex-template/main.png
 importance: 1
 git: https://github.com/mpek29/mpek29-latex-template
-category: Computer Science
+category: other
+subcategory: General
 ---
 
 
