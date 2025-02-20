@@ -5,7 +5,7 @@ description: Open-source reverse-engineered CJMCU CP2102 USB to UART adapter for
 img: assets/img/projects/CP2102USB2UART/main.png
 importance: 1
 git: https://github.com/mpek29/CP2102USB2UART
-category: 2025
+category: Electronics
 ---
 
 

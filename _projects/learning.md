@@ -5,7 +5,7 @@ description: A website created using Jekyll and the "al-folio" theme that i have
 img: assets/img/projects/learning/main.png
 importance: 1
 git: https://github.com/mpek29/learning
-category: 2025
+category: Computer Science
 ---
 
 

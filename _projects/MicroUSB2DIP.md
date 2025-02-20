@@ -5,7 +5,7 @@ description: An open-source version of a compact Micro USB to DIP adapter for ea
 img: assets/img/projects/MicroUSB2DIP/main.png
 importance: 1
 git: https://github.com/mpek29/MicroUSB2DIP
-category: 2025
+category: Electronics
 ---
 
 
