@@ -96,6 +96,11 @@ jobs:
                 subcategory="Artificial Intelligence"
                 ;;
 
+              "documentation")
+                main_topic="Computer Science"
+                subcategory="Documentation"
+                ;;
+
               # Electronics
               "pcb-design")
                 main_topic="Electronics"
