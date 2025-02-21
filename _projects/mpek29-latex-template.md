@@ -2,8 +2,7 @@
 layout: page
 title: mpek29-latex-template
 description: 📄 Simple LaTeX template for ENIB
-img: assets/img/flo_pic.png
-assets/img/projects/AntUpRising/main.png
+img: mpek29-latex-template/assets/img/main.png
 importance: 1
 git: https://github.com/mpek29/mpek29-latex-template
 category: Computer Science

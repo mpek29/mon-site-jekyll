@@ -2,8 +2,7 @@
 layout: page
 title: MicroUSB2DIP
 description: 🔌 Micro USB to DIP reverse-engineered
-img: assets/img/flo_pic.png
-assets/img/projects/AntUpRising/main.png
+img: MicroUSB2DIP/assets/img/main.png
 importance: 1
 git: https://github.com/mpek29/MicroUSB2DIP
 category: Electronics
