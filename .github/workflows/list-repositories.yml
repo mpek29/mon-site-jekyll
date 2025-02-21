@@ -1,3 +1,43 @@
+name: List Repositories
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  list_repositories:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Store repositories in a variable
+      id: list_repositories
+      run: |
+        echo "Fetching repository list..."
+        
+        REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                            -H "Accept: application/vnd.github.v3+json" \
+                            https://api.github.com/users/mpek29/repos?type=all)
+        
+        if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
+          echo "❌ Erreur lors de la récupération des repos :"
+          echo "$REPOS_JSON"
+          exit 1
+        fi
+
+        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
+
+        if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
+          echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
+          exit 1
+        fi
+
+        echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
+
     - name: Create Markdown files
       run: |
         echo "Creating Markdown files for each repository..."
@@ -100,3 +140,13 @@
           echo -e "$markdown_content" > "_projects/$title.md"
           echo "✅ Created _projects/$title.md"
         done
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add _projects/*.md assets/img/projects/*
+        git commit -m "Add Markdown files and images for repositories" || echo "No changes to commit"
+        git push origin master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
