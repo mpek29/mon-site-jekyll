@@ -2,7 +2,7 @@
 layout: page
 title: BoardMapper
 description: 🛠️ PCB placement map generator
-img: assets/img/projects/default.png
+img: assets/img/flo_pic.png
 importance: 1
 git: https://github.com/mpek29/BoardMapper
 category: Computer Science
