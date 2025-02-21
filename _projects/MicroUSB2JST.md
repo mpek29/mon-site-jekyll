@@ -5,11 +5,9 @@ description: 🔌 MicroUSB -> JST-SH & JST-PH
 img: assets/img/projects/MicroUSB2JST/main.png
 importance: 1
 git: https://github.com/mpek29/MicroUSB2JST
-category: other
-subcategory: General
+category: Electronics
+subcategory: PCB Design
 ---
-
-![Main Preview](assets/img/main.png)
 
 
 
