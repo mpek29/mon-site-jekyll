@@ -1,8 +1,5 @@
 name: List Repositories
 
-permissions:
-  contents: read  # Permet de lire le contenu des dépôts
-
 on:
   push:
     branches:
@@ -14,161 +11,161 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Store repositories in a variable
-      id: list_repositories
-      run: |
-        echo "Fetching repository list..."
-        
-        REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.MY_PERSONAL_TOKEN }}" \
-                            -H "Accept: application/vnd.github.v3+json" \
-                            https://api.github.com/user/repos?type=all)
-        
-        if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
-          echo "❌ Error fetching repos:"
-          echo "$REPOS_JSON"
-          exit 1
-        fi
-
-        REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
-
-        if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
-          echo "❌ No repositories found."
-          exit 1
-        fi
-
-        echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
-
-    - name: Create Markdown files
-      run: |
-        echo "Creating Markdown files for each repository..."
-        mkdir -p _projects  
-
-        echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
-          title=$(echo "$repo" | jq -r '.title')
-
-          if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
-            echo "⚠️ Repository '$title' ignored."
-            continue
+      - name: Store repositories in a variable
+        id: list_repositories
+        run: |
+          echo "Fetching repository list..."
+          
+          REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                              -H "Accept: application/vnd.github.v3+json" \
+                              https://api.github.com/users/mpek29/repos?type=all)
+          
+          if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
+            echo "❌ Error fetching repos:"
+            echo "$REPOS_JSON"
+            exit 1
           fi
 
-          description=$(echo "$repo" | jq -r '.description')
-          url=$(echo "$repo" | jq -r '.url')
+          REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
 
-          if [ -z "$title" ]; then
-            echo "⚠️ Repository with no name detected, it will be ignored."
-            continue
+          if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
+            echo "❌ No repositories found for user mpek29."
+            exit 1
           fi
 
-          # Determine category and subcategory
-          main_topic="other"
-          subcategory="General"
+          echo "REPOS_LIST=$REPOS_LIST" >> $GITHUB_ENV
 
-          for topic in $(echo "$repo" | jq -r '.topics[]'); do
-            case "$topic" in
-              "software-development") main_topic="Computer Science"; subcategory="Software Development" ;;
-              "firmware-development") main_topic="Computer Science"; subcategory="Firmware Development" ;;
-              "data-engineering") main_topic="Computer Science"; subcategory="Data Engineering" ;;
-              "cybersecurity") main_topic="Computer Science"; subcategory="Cybersecurity" ;;
-              "devops-automation") main_topic="Computer Science"; subcategory="DevOps & Automation" ;;
-              "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
-              "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
-              "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
-              "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
-              "signal-image-processing") main_topic="Electronics"; subcategory="Signal and Image Processing" ;;
-              "pcb-reverse-engineering") main_topic="Electronics"; subcategory="PCB Reverse Engineering" ;;
-              "pcb-repair") main_topic="Electronics"; subcategory="PCB Repair" ;;
-              "digital-electronics") main_topic="Electronics"; subcategory="Digital Electronics" ;;
-              "mechanical-design") main_topic="Mechanical Engineering"; subcategory="Mechanical Design" ;;
-              "analysis-simulation") main_topic="Mechanical Engineering"; subcategory="Analysis and Simulation" ;;
-              "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
-              "materials-mechanics-materials") main_topic="Mechanical Engineering"; subcategory="Materials and Mechanics of Materials" ;;
-              "control-systems") main_topic="Mechanical Engineering"; subcategory="Control Systems" ;;
-            esac
+      - name: Create Markdown files
+        run: |
+          echo "Creating Markdown files for each repository..."
+          mkdir -p _projects  
+
+          echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
+            title=$(echo "$repo" | jq -r '.title')
+
+            if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
+              echo "⚠️ Repository '$title' ignored."
+              continue
+            fi
+
+            description=$(echo "$repo" | jq -r '.description')
+            url=$(echo "$repo" | jq -r '.url')
+
+            if [ -z "$title" ]; then
+              echo "⚠️ Repository with no name detected, it will be ignored."
+              continue
+            fi
+
+            # Determine category and subcategory
+            main_topic="other"
+            subcategory="General"
+
+            for topic in $(echo "$repo" | jq -r '.topics[]'); do
+              case "$topic" in
+                "software-development") main_topic="Computer Science"; subcategory="Software Development" ;;
+                "firmware-development") main_topic="Computer Science"; subcategory="Firmware Development" ;;
+                "data-engineering") main_topic="Computer Science"; subcategory="Data Engineering" ;;
+                "cybersecurity") main_topic="Computer Science"; subcategory="Cybersecurity" ;;
+                "devops-automation") main_topic="Computer Science"; subcategory="DevOps & Automation" ;;
+                "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
+                "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
+                "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
+                "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
+                "signal-image-processing") main_topic="Electronics"; subcategory="Signal and Image Processing" ;;
+                "pcb-reverse-engineering") main_topic="Electronics"; subcategory="PCB Reverse Engineering" ;;
+                "pcb-repair") main_topic="Electronics"; subcategory="PCB Repair" ;;
+                "digital-electronics") main_topic="Electronics"; subcategory="Digital Electronics" ;;
+                "mechanical-design") main_topic="Mechanical Engineering"; subcategory="Mechanical Design" ;;
+                "analysis-simulation") main_topic="Mechanical Engineering"; subcategory="Analysis and Simulation" ;;
+                "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
+                "materials-mechanics-materials") main_topic="Mechanical Engineering"; subcategory="Materials and Mechanics of Materials" ;;
+                "control-systems") main_topic="Mechanical Engineering"; subcategory="Control Systems" ;;
+              esac
+            done
+
+            # Check the content of assets/img directory in each repository
+            echo "Cloning repository '$title' to check assets/img directory..."
+            if ! git clone --depth=1 "https://github.com/mpek29/$title.git" "$title"; then
+              echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
+              continue  # Skip to the next repository
+            fi
+
+            img_dir="$title/assets/img"
+
+            if [ -d "$img_dir" ]; then
+              echo "✅ Found 'assets/img' directory in '$title'."
+              img_files=$(find "$img_dir" -type f -iname '*.png')
+              if [ -z "$img_files" ]; then
+                echo "⚠️ No images found in 'assets/img' for repository '$title'."
+                img_path="assets/img/projects/default.png"  # Default image if none found
+              else
+                echo "Images found in 'assets/img' for repository '$title':"
+                echo "$img_files"
+
+                # Create the target directory for images
+                target_dir="assets/img/projects/$title"
+                mkdir -p "$target_dir"
+
+                # Copy images to the target directory
+                for img in $img_files; do
+                  cp "$img" "$target_dir/"
+                  echo "✅ Copied image '$img' to '$target_dir'."
+                done
+
+                # Use the first image found as the representative image
+                img_path=$(echo "$img_files" | head -n 1)  # Use the first image found
+              fi
+            else
+              echo "⚠️ 'assets/img' directory does not exist in repository '$title'."
+              img_path="assets/img/projects/default.png"  # Default image if directory doesn't exist
+            fi
+
+            # Clean up by removing the cloned repository
+            rm -rf "$title"
+
+            markdown_content="---\n"
+            markdown_content+="layout: page\n"
+            markdown_content+="title: $title\n"
+            markdown_content+="description: $description\n"
+            markdown_content+="img: assets/img/projects/$title/main.png\n"
+            markdown_content+="importance: 1\n"
+            markdown_content+="git: $url\n"
+            markdown_content+="category: $main_topic\n"
+            markdown_content+="subcategory: $subcategory\n"
+            markdown_content+="---\n\n"
+
+            # Retrieve the desired section of the README
+            README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                                    -H "Accept: application/vnd.github.v3.raw" \
+                                    https://api.github.com/repos/mpek29/$title/readme)
+
+            README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
+
+            # Filter out unwanted lines
+            README_PART=$(echo "$README_PART" | sed '/!\[Main Preview\](assets\/img\/main.png)/d')
+            
+            # Add line breaks after headings
+            README_PART=$(echo "$README_PART" | sed -E "s|(## [^\n]+)|\1\n|g")
+            README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
+
+            # Replace <img> tags with Jekyll syntax
+            README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
+
+            markdown_content+="$README_PART\n"
+            
+            echo -e "$markdown_content" > "_projects/$title.md"
+            echo "✅ Created _projects/$title.md"
           done
 
-          # Check the content of assets/img directory in each repository
-          echo "Cloning repository '$title' to check assets/img directory..."
-          if ! git clone --depth=1 "https://github.com/mpek29/$title.git" "$title"; then
-            echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
-            continue  # Skip to the next repository
-          fi
-
-          img_dir="$title/assets/img"
-
-          if [ -d "$img_dir" ]; then
-            echo "✅ Found 'assets/img' directory in '$title'."
-            img_files=$(find "$img_dir" -type f -iname '*.png')
-            if [ -z "$img_files" ]; then
-              echo "⚠️ No images found in 'assets/img' for repository '$title'."
-              img_path="assets/img/projects/default.png"  # Default image if none found
-            else
-              echo "Images found in 'assets/img' for repository '$title':"
-              echo "$img_files"
-
-              # Create the target directory for images
-              target_dir="assets/img/projects/$title"
-              mkdir -p "$target_dir"
-
-              # Copy images to the target directory
-              for img in $img_files; do
-                cp "$img" "$target_dir/"
-                echo "✅ Copied image '$img' to '$target_dir'."
-              done
-
-              # Use the first image found as the representative image
-              img_path=$(echo "$img_files" | head -n 1)  # Use the first image found
-            fi
-          else
-            echo "⚠️ 'assets/img' directory does not exist in repository '$title'."
-            img_path="assets/img/projects/default.png"  # Default image if directory doesn't exist
-          fi
-
-          # Clean up by removing the cloned repository
-          rm -rf "$title"
-
-          markdown_content="---\n"
-          markdown_content+="layout: page\n"
-          markdown_content+="title: $title\n"
-          markdown_content+="description: $description\n"
-          markdown_content+="img: assets/img/projects/$title/main.png\n"
-          markdown_content+="importance: 1\n"
-          markdown_content+="git: $url\n"
-          markdown_content+="category: $main_topic\n"
-          markdown_content+="subcategory: $subcategory\n"
-          markdown_content+="---\n\n"
-
-          # Retrieve the desired section of the README
-          README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.MY_PERSONAL_TOKEN }}" \
-                                -H "Accept: application/vnd.github.v3.raw" \
-                                https://api.github.com/repos/mpek29/$title/readme)
-
-          README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
-
-          # Filter out unwanted lines
-          README_PART=$(echo "$README_PART" | sed '/!\[Main Preview\](assets\/img\/main.png)/d')
-          
-          # Add line breaks after headings
-          README_PART=$(echo "$README_PART" | sed -E "s|(## [^\n]+)|\1\n|g")
-          README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
-
-          # Replace <img> tags with Jekyll syntax
-          README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
-
-          markdown_content+="$README_PART\n"
-          
-          echo -e "$markdown_content" > "_projects/$title.md"
-          echo "✅ Created _projects/$title.md"
-        done
-
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add _projects/*.md assets/img/projects/*
-        git commit -m "Add Markdown files and images for repositories" || echo "No changes to commit"
-        git push origin master
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN }}  # Utilise le token d'accès personnel ici
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add _projects/*.md assets/img/projects/*
+          git commit -m "Add Markdown files and images for repositories" || echo "No changes to commit"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
