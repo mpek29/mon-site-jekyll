@@ -86,23 +86,36 @@ jobs:
             esac
           done
 
-          # Instead of downloading images, list all images in the directory
-          img_dir="assets/img"
-          img_paths=$(find "$img_dir" -type f -iname '*.png')
+          # Check the content of assets/img directory in each repository
+          echo "Cloning repository '$title' to check assets/img directory..."
+          git clone --depth=1 "https://github.com/mpek29/$title.git" "$title"
 
-          if [ -z "$img_paths" ]; then
-            img_paths="assets/img/projects/default.png"
-            echo "⚠️ No images found for repository '$title'. Using default image: $img_paths"
+          img_dir="$title/assets/img"
+
+          if [ -d "$img_dir" ]; then
+            echo "✅ Found 'assets/img' directory in '$title'."
+            img_files=$(find "$img_dir" -type f -iname '*.png')
+            if [ -z "$img_files" ]; then
+              echo "⚠️ No images found in 'assets/img' for repository '$title'."
+              img_path="assets/img/projects/default.png"  # Default image if none found
+            else
+              echo "Images found in 'assets/img' for repository '$title':"
+              echo "$img_files"
+              img_path=$(echo "$img_files" | head -n 1)  # Use the first image found
+            fi
           else
-            echo "✅ Found images for repository '$title':"
-            echo "$img_paths"
+            echo "⚠️ 'assets/img' directory does not exist in repository '$title'."
+            img_path="assets/img/projects/default.png"  # Default image if directory doesn't exist
           fi
+
+          # Clean up by removing the cloned repository
+          rm -rf "$title"
 
           markdown_content="---\n"
           markdown_content+="layout: page\n"
           markdown_content+="title: $title\n"
           markdown_content+="description: $description\n"
-          markdown_content+="img: $img_paths\n"
+          markdown_content+="img: $img_path\n"
           markdown_content+="importance: 1\n"
           markdown_content+="git: $url\n"
           markdown_content+="category: $main_topic\n"
