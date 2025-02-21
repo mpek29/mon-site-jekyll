@@ -65,7 +65,6 @@ jobs:
 
           for topic in $(echo "$repo" | jq -r '.topics[]'); do
             case "$topic" in
-              # Computer Science
               "software-development")
                 main_topic="Computer Science"
                 subcategory="Software Development"
@@ -78,68 +77,6 @@ jobs:
                 main_topic="Computer Science"
                 subcategory="Data Engineering"
                 ;;
-              "cybersecurity")
-                main_topic="Computer Science"
-                subcategory="Cybersecurity"
-                ;;
-              "devops-automation")
-                main_topic="Computer Science"
-                subcategory="DevOps & Automation"
-                ;;
-              "artificial-intelligence")
-                main_topic="Computer Science"
-                subcategory="Artificial Intelligence"
-                ;;
-              "documentation")
-                main_topic="Computer Science"
-                subcategory="Documentation"
-                ;;
-              # Electronics
-              "pcb-design")
-                main_topic="Electronics"
-                subcategory="PCB Design"
-                ;;
-              "power-electronics")
-                main_topic="Electronics"
-                subcategory="Power Electronics"
-                ;;
-              "signal-image-processing")
-                main_topic="Electronics"
-                subcategory="Signal and Image Processing"
-                ;;
-              "pcb-reverse-engineering")
-                main_topic="Electronics"
-                subcategory="PCB Reverse Engineering"
-                ;;
-              "pcb-repair")
-                main_topic="Electronics"
-                subcategory="PCB Repair"
-                ;;
-              "digital-electronics")
-                main_topic="Electronics"
-                subcategory="Digital Electronics"
-                ;;
-              # Mechanical Engineering
-              "mechanical-design")
-                main_topic="Mechanical Engineering"
-                subcategory="Mechanical Design"
-                ;;
-              "analysis-simulation")
-                main_topic="Mechanical Engineering"
-                subcategory="Analysis and Simulation"
-                ;;
-              "fluid-mechanics")
-                main_topic="Mechanical Engineering"
-                subcategory="Fluid Mechanics"
-                ;;
-              "materials-mechanics-materials")
-                main_topic="Mechanical Engineering"
-                subcategory="Materials and Mechanics of Materials"
-                ;;
-              "control-systems")
-                main_topic="Mechanical Engineering"
-                subcategory="Control Systems"
-                ;;
             esac
           done
 
@@ -147,6 +84,11 @@ jobs:
           README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3.raw" \
                             https://api.github.com/repos/mpek29/$title/readme)
+
+          # Vérifier si le README contient des balises <img> et modifier les URLs
+          if [[ ! -z "$README_CONTENT" ]]; then
+            README_CONTENT=$(echo "$README_CONTENT" | sed -E 's#<img src="assets/img/([^"]+).png" width="([0-9]+)" height="([0-9]+)">#<img src="{{ site.baseurl }}/assets/img/projects/'$title'/\1.png" width="\2" height="\3">#g')
+          fi
 
           img_path="assets/img/projects/$title/main.png"
           if [ ! -f "$img_path" ]; then
@@ -171,7 +113,14 @@ jobs:
           markdown_content+="category: $main_topic\n"
           markdown_content+="subcategory: $subcategory\n"
           markdown_content+="---\n\n"
+
+          # Ajout de la ligne suivante "![Main Preview](assets/img/main.png)"
+          markdown_content+="![Main Preview](assets/img/main.png)\n\n"
+
+          # Ajout d'une note manuelle si nécessaire
           markdown_content+="$manual_note\n\n"
+
+          # Ajout du README
           markdown_content+="## Description\n\n$README_CONTENT\n"
 
           echo -e "$markdown_content" > "_projects/$title.md"
