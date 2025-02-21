@@ -65,81 +65,24 @@ jobs:
 
           for topic in $(echo "$repo" | jq -r '.topics[]'); do
             case "$topic" in
-              # Computer Science
-              "software-development")
-                main_topic="Computer Science"
-                subcategory="Software Development"
-                ;;
-              "firmware-development")
-                main_topic="Computer Science"
-                subcategory="Firmware Development"
-                ;;
-              "data-engineering")
-                main_topic="Computer Science"
-                subcategory="Data Engineering"
-                ;;
-              "cybersecurity")
-                main_topic="Computer Science"
-                subcategory="Cybersecurity"
-                ;;
-              "devops-automation")
-                main_topic="Computer Science"
-                subcategory="DevOps & Automation"
-                ;;
-              "artificial-intelligence")
-                main_topic="Computer Science"
-                subcategory="Artificial Intelligence"
-                ;;
-              "documentation")
-                main_topic="Computer Science"
-                subcategory="Documentation"
-                ;;
-              # Electronics
-              "pcb-design")
-                main_topic="Electronics"
-                subcategory="PCB Design"
-                ;;
-              "power-electronics")
-                main_topic="Electronics"
-                subcategory="Power Electronics"
-                ;;
-              "signal-image-processing")
-                main_topic="Electronics"
-                subcategory="Signal and Image Processing"
-                ;;
-              "pcb-reverse-engineering")
-                main_topic="Electronics"
-                subcategory="PCB Reverse Engineering"
-                ;;
-              "pcb-repair")
-                main_topic="Electronics"
-                subcategory="PCB Repair"
-                ;;
-              "digital-electronics")
-                main_topic="Electronics"
-                subcategory="Digital Electronics"
-                ;;
-              # Mechanical Engineering
-              "mechanical-design")
-                main_topic="Mechanical Engineering"
-                subcategory="Mechanical Design"
-                ;;
-              "analysis-simulation")
-                main_topic="Mechanical Engineering"
-                subcategory="Analysis and Simulation"
-                ;;
-              "fluid-mechanics")
-                main_topic="Mechanical Engineering"
-                subcategory="Fluid Mechanics"
-                ;;
-              "materials-mechanics-materials")
-                main_topic="Mechanical Engineering"
-                subcategory="Materials and Mechanics of Materials"
-                ;;
-              "control-systems")
-                main_topic="Mechanical Engineering"
-                subcategory="Control Systems"
-                ;;
+              "software-development") main_topic="Computer Science"; subcategory="Software Development" ;;
+              "firmware-development") main_topic="Computer Science"; subcategory="Firmware Development" ;;
+              "data-engineering") main_topic="Computer Science"; subcategory="Data Engineering" ;;
+              "cybersecurity") main_topic="Computer Science"; subcategory="Cybersecurity" ;;
+              "devops-automation") main_topic="Computer Science"; subcategory="DevOps & Automation" ;;
+              "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
+              "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
+              "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
+              "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
+              "signal-image-processing") main_topic="Electronics"; subcategory="Signal and Image Processing" ;;
+              "pcb-reverse-engineering") main_topic="Electronics"; subcategory="PCB Reverse Engineering" ;;
+              "pcb-repair") main_topic="Electronics"; subcategory="PCB Repair" ;;
+              "digital-electronics") main_topic="Electronics"; subcategory="Digital Electronics" ;;
+              "mechanical-design") main_topic="Mechanical Engineering"; subcategory="Mechanical Design" ;;
+              "analysis-simulation") main_topic="Mechanical Engineering"; subcategory="Analysis and Simulation" ;;
+              "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
+              "materials-mechanics-materials") main_topic="Mechanical Engineering"; subcategory="Materials and Mechanics of Materials" ;;
+              "control-systems") main_topic="Mechanical Engineering"; subcategory="Control Systems" ;;
             esac
           done
 
@@ -151,10 +94,10 @@ jobs:
           img_path="assets/img/projects/$title/main.png"
           if [ ! -f "$img_path" ]; then
             if [ -f "assets/img/projects/$title/MANUAL_DOWNLOAD_REQUIRED" ]; then
-              img_path="assets/img/projects/manual.png"  
+              img_path="assets/img/projects/manual.png"
               manual_note="\n\n⚠️ **Les images pour ce projet doivent être ajoutées manuellement.**"
             else
-              img_path="assets/img/projects/default.png"  
+              img_path="assets/img/projects/default.png"
               manual_note=""
             fi
           else
@@ -172,17 +115,16 @@ jobs:
           markdown_content+="subcategory: $subcategory\n"
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n\n"
-          
-          # Étape 1 : Récupérer la partie du README
-          README_PART=$(echo "$README_CONTENT" | sed -n '/!\[Main Preview](assets\/img\/main\.png)/, /## 🌟 License/ p' | sed '1d;$d')
-          
-          # Étape 2 : Définir le nom du dépôt
-          repo_name="$title"
-          
-          # Étape 3 : Remplacer les balises img par le format souhaité
-          README_PART=$(echo "$README_PART" | sed "s|<img src=\"assets/img/\(.*\)\.png\" width=\"300\" height=\"300\">|{% include image.html path=\"assets/img/projects/$repo_name/\1.png\" width=\"300\" height=\"300\" %}|g")
-          
-          # Étape 4 : Ajouter à markdown_content
+
+          # Modifier les images et ajouter un retour à la ligne après chaque titre
+          README_PART=$(echo "$README_CONTENT" | sed -E "s|(### [^\n]+)|\1\n|g")
+
+          # Remplacer les balises <img> par la syntaxe Jekyll
+          README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
+
+          # Corriger les images dans les tableaux
+          README_PART=$(echo "$README_PART" | sed -E "s|\| <img src=\"assets/img/([^\"]+).png\"[^>]*> \|| {% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %} |g")
+
           markdown_content+="$README_PART\n"
           
           echo -e "$markdown_content" > "_projects/$title.md"
