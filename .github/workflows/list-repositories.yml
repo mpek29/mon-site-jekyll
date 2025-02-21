@@ -24,7 +24,7 @@ jobs:
                             https://api.github.com/users/mpek29/repos?type=all)
         
         if echo "$REPOS_JSON" | jq -e 'has("message")' > /dev/null; then
-          echo "❌ Erreur lors de la récupération des repos :"
+          echo "❌ Error fetching repos:"
           echo "$REPOS_JSON"
           exit 1
         fi
@@ -32,7 +32,7 @@ jobs:
         REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
 
         if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
-          echo "❌ Aucun dépôt trouvé pour l'utilisateur mpek29."
+          echo "❌ No repositories found for user mpek29."
           exit 1
         fi
 
@@ -47,7 +47,7 @@ jobs:
           title=$(echo "$repo" | jq -r '.title')
 
           if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
-            echo "⚠️ Dépôt '$title' ignoré."
+            echo "⚠️ Repository '$title' ignored."
             continue
           fi
 
@@ -55,11 +55,11 @@ jobs:
           url=$(echo "$repo" | jq -r '.url')
 
           if [ -z "$title" ]; then
-            echo "⚠️ Un dépôt sans nom détecté, il sera ignoré."
+            echo "⚠️ Repository with no name detected, it will be ignored."
             continue
           fi
 
-          # Déterminer la catégorie et la sous-catégorie
+          # Determine category and subcategory
           main_topic="other"
           subcategory="General"
 
@@ -86,53 +86,44 @@ jobs:
             esac
           done
 
-          # Récupérer le contenu du README
-          README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                            -H "Accept: application/vnd.github.v3.raw" \
-                            https://api.github.com/repos/mpek29/$title/readme)
-
-          # Définir le chemin du dossier contenant les images
+          # Instead of downloading images, list all images in the directory
           img_dir="assets/img"
+          img_paths=$(find "$img_dir" -type f -iname '*.png')
 
-          # Vérifier si le dossier d'images existe
-          if [ -d "$img_dir" ]; then
-            # Vérifier s'il y a des images dans le dossier
-            img_path=$(find "$img_dir" -type f -iname '*.png' | head -n 1)
-
-            if [ -n "$img_path" ]; then
-              echo "✅ Found image for repository '$title': $img_path"
-            else
-              img_path="assets/img/projects/default.png"
-              echo "⚠️ No image found for repository '$title'. Using default image: $img_path"
-            fi
+          if [ -z "$img_paths" ]; then
+            img_paths="assets/img/projects/default.png"
+            echo "⚠️ No images found for repository '$title'. Using default image: $img_paths"
           else
-            img_path="assets/img/projects/default.png"
-            echo "⚠️ Image directory does not exist for repository '$title'. Using default image: $img_path"
+            echo "✅ Found images for repository '$title':"
+            echo "$img_paths"
           fi
 
           markdown_content="---\n"
           markdown_content+="layout: page\n"
           markdown_content+="title: $title\n"
           markdown_content+="description: $description\n"
-          markdown_content+="img: $img_path\n"
+          markdown_content+="img: $img_paths\n"
           markdown_content+="importance: 1\n"
           markdown_content+="git: $url\n"
           markdown_content+="category: $main_topic\n"
           markdown_content+="subcategory: $subcategory\n"
           markdown_content+="---\n\n"
 
-          # Récupérer la section désirée du README
+          # Retrieve the desired section of the README
+          README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                                -H "Accept: application/vnd.github.v3.raw" \
+                                https://api.github.com/repos/mpek29/$title/readme)
+
           README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
 
-          # Filtrer les lignes indésirables
+          # Filter out unwanted lines
           README_PART=$(echo "$README_PART" | sed '/!\[Main Preview\](assets\/img\/main.png)/d')
           
-          # Ajouter un retour à la ligne après chaque titre de niveau ##
+          # Add line breaks after headings
           README_PART=$(echo "$README_PART" | sed -E "s|(## [^\n]+)|\1\n|g")
-          # Ajouter un retour à la ligne après chaque titre de niveau ###
           README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
 
-          # Remplacer les balises <img> par la syntaxe Jekyll
+          # Replace <img> tags with Jekyll syntax
           README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
 
           markdown_content+="$README_PART\n"
