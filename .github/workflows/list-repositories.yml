@@ -29,7 +29,7 @@ jobs:
             exit 1
           fi
 
-          REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, topics: (.topics // [])}]')
+          REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, full_name: .full_name, topics: (.topics // [])}]')
 
           if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
             echo "❌ No repositories found for user mpek29."
@@ -45,6 +45,7 @@ jobs:
 
           echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
             title=$(echo "$repo" | jq -r '.title')
+            full_name=$(echo "$repo" | jq -r '.full_name')  # Add this line to retrieve full_name
 
             if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
               echo "⚠️ Repository '$title' ignored."
@@ -88,12 +89,10 @@ jobs:
 
             # Check the content of assets/img directory in each repository
             echo "Cloning repository '$title' to check assets/img directory..."
-            repo_full_name=$(echo "$repo" | jq -r '.full_name')  # Use full_name for cloning
-            if ! git clone --depth=1 "https://github.com/$repo_full_name.git" "$title"; then
+            if ! git clone --depth=1 "https://github.com/$full_name.git" "$title"; then  # Use full_name for cloning
               echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
               continue  # Skip to the next repository
             fi
-            
             img_dir="$title/assets/img"
 
             if [ -d "$img_dir" ]; then
@@ -131,6 +130,7 @@ jobs:
             markdown_content+="layout: page\n"
             markdown_content+="title: $title\n"
             markdown_content+="description: $description\n"
+            markdown_content+="full_name: $full_name\n"  # Add full_name to markdown content
             markdown_content+="img: assets/img/projects/$title/main.png\n"
             markdown_content+="importance: 1\n"
             markdown_content+="git: $url\n"
