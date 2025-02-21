@@ -92,7 +92,7 @@ jobs:
                             https://api.github.com/repos/mpek29/$title/readme)
 
           # Définir le chemin du dossier contenant les images
-          img_dir="assets/img/projects/$title"
+          img_dir="assets/img"
 
           # Vérifier si le dossier d'images existe
           if [ -d "$img_dir" ]; then
