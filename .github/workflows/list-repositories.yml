@@ -1,5 +1,8 @@
 name: List Repositories
 
+permissions:
+  contents: read  # Permet de lire le contenu des dépôts
+
 on:
   push:
     branches:
@@ -19,7 +22,7 @@ jobs:
       run: |
         echo "Fetching repository list..."
         
-        REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+        REPOS_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.MY_PERSONAL_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3+json" \
                             https://api.github.com/user/repos?type=all)
         
@@ -138,7 +141,7 @@ jobs:
           markdown_content+="---\n\n"
 
           # Retrieve the desired section of the README
-          README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.MY_PERSONAL_TOKEN }}" \
                                 -H "Accept: application/vnd.github.v3.raw" \
                                 https://api.github.com/repos/mpek29/$title/readme)
 
@@ -168,4 +171,4 @@ jobs:
         git commit -m "Add Markdown files and images for repositories" || echo "No changes to commit"
         git push origin master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN }}  # Utilise le token d'accès personnel ici
