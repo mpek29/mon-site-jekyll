@@ -138,10 +138,10 @@ jobs:
             markdown_content+="subcategory: $subcategory\n"
             markdown_content+="---\n\n"
 
-            # Retrieve the desired section of the README
+            # Retrieve the desired section of the README using full_name
             README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3.raw" \
-                            https://api.github.com/repos/mpek29/$title/readme)
+                            https://api.github.com/repos/$full_name/readme)  # Use full_name for README content
 
             README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
 
