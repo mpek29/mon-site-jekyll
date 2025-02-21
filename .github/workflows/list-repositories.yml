@@ -120,7 +120,7 @@ jobs:
           README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
           
           # Modifier les images et ajouter un retour à la ligne après chaque titre
-          README_PART=$(echo "$README_CONTENT" | sed -E "s|(### [^\n]+)|\1\n|g")
+          README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
 
           # Remplacer les balises <img> par la syntaxe Jekyll
           README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
