@@ -130,7 +130,7 @@ jobs:
           markdown_content+="layout: page\n"
           markdown_content+="title: $title\n"
           markdown_content+="description: $description\n"
-          markdown_content+="img: assets/$title/img/main.png\n"
+          markdown_content+="img: assets/img/projects/$title/main.png\n"
           markdown_content+="importance: 1\n"
           markdown_content+="git: $url\n"
           markdown_content+="category: $main_topic\n"
