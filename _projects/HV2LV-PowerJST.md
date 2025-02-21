@@ -38,5 +38,5 @@ subcategory: PCB Design
 
 | 📜 Schematic | 🖥️ PCB Layout | 🏗️ 3D |
 |-----------|-----------|-----------|
-| ![Schematic](assets/img/schematic.png) | ![PCB Layout](assets/img/pcb_layout.png) | ![3D](assets/img/3d.png) |
+| {% include image.html path="assets/img/projects/HV2LV-PowerJST/schematic.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/HV2LV-PowerJST/pcb_layout.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/HV2LV-PowerJST/3d.png" width="300" height="300" %} |
 
