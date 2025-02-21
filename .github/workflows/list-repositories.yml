@@ -116,6 +116,9 @@ jobs:
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n\n"
 
+          # Récupérer la section désirée du README
+          README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
+          
           # Modifier les images et ajouter un retour à la ligne après chaque titre
           README_PART=$(echo "$README_CONTENT" | sed -E "s|(### [^\n]+)|\1\n|g")
 
