@@ -104,6 +104,18 @@ jobs:
             else
               echo "Images found in 'assets/img' for repository '$title':"
               echo "$img_files"
+
+              # Create the target directory for images
+              target_dir="assets/img/projects/$title"
+              mkdir -p "$target_dir"
+
+              # Copy images to the target directory
+              for img in $img_files; do
+                cp "$img" "$target_dir/"
+                echo "✅ Copied image '$img' to '$target_dir'."
+              done
+
+              # Use the first image found as the representative image
               img_path=$(echo "$img_files" | head -n 1)  # Use the first image found
             fi
           else
