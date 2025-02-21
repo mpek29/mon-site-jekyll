@@ -2,6 +2,7 @@
 layout: page
 title: BoardMapper
 description: 🛠️ PCB placement map generator
+full_name: mpek29/BoardMapper
 img: assets/img/projects/BoardMapper/main.png
 importance: 1
 git: https://github.com/mpek29/BoardMapper

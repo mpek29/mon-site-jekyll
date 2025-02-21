@@ -2,6 +2,7 @@
 layout: page
 title: mpek29-latex-template
 description: 📄 Simple LaTeX template for ENIB
+full_name: mpek29/mpek29-latex-template
 img: assets/img/projects/mpek29-latex-template/main.png
 importance: 1
 git: https://github.com/mpek29/mpek29-latex-template

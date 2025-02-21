@@ -2,6 +2,7 @@
 layout: page
 title: AntUpRising
 description: Global Game Jam 2023
+full_name: RomainFauvel/AntUpRising
 img: assets/img/projects/AntUpRising/main.png
 importance: 1
 git: https://github.com/RomainFauvel/AntUpRising

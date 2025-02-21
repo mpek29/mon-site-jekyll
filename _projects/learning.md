@@ -2,6 +2,7 @@
 layout: page
 title: learning
 description: 🌐 Jekyll site to archive my knowledge
+full_name: mpek29/learning
 img: assets/img/projects/learning/main.png
 importance: 1
 git: https://github.com/mpek29/learning
