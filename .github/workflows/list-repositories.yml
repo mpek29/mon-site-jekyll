@@ -122,7 +122,9 @@ jobs:
           # Filtrer les lignes indésirables
           README_PART=$(echo "$README_PART" | sed '/!\[Main Preview\](assets\/img\/main.png)/d')
           
-          # Modifier les images et ajouter un retour à la ligne après chaque titre
+          # Ajouter un retour à la ligne après chaque titre de niveau ##
+          README_PART=$(echo "$README_PART" | sed -E "s|(## [^\n]+)|\1\n|g")
+          # Ajouter un retour à la ligne après chaque titre de niveau ###
           README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
 
           # Remplacer les balises <img> par la syntaxe Jekyll
