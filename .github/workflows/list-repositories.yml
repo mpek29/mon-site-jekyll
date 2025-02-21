@@ -172,9 +172,19 @@ jobs:
           markdown_content+="subcategory: $subcategory\n"
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n\n"
+          
+          # Étape 1 : Récupérer la partie du README
           README_PART=$(echo "$README_CONTENT" | sed -n '/!\[Main Preview](assets\/img\/main\.png)/, /## 🌟 License/ p' | sed '1d;$d')
+          
+          # Étape 2 : Définir le nom du dépôt
+          repo_name="$title"
+          
+          # Étape 3 : Remplacer les balises img par le format souhaité
+          README_PART=$(echo "$README_PART" | sed "s|<img src=\"assets/img/\(.*\)\.png\" width=\"300\" height=\"300\">|{% include image.html path=\"assets/img/projects/$repo_name/\1.png\" width=\"300\" height=\"300\" %}|g")
+          
+          # Étape 4 : Ajouter à markdown_content
           markdown_content+="$README_PART\n"
-
+          
           echo -e "$markdown_content" > "_projects/$title.md"
           echo "✅ Created _projects/$title.md"
         done
