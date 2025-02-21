@@ -3,6 +3,7 @@ layout: page
 title: ZEthyDex
 description: 📱 Android app like a Pokédex
 img: assets/img/flo_pic.png
+assets/img/projects/AntUpRising/main.png
 importance: 1
 git: https://github.com/mpek29/ZEthyDex
 category: Computer Science
