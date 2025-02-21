@@ -86,6 +86,14 @@ jobs:
               esac
             done
 
+            # Check the content of assets/img directory in each repository
+            echo "Cloning repository '$title' to check assets/img directory..."
+            repo_full_name=$(echo "$repo" | jq -r '.full_name')  # Use full_name for cloning
+            if ! git clone --depth=1 "https://github.com/$repo_full_name.git" "$title"; then
+              echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
+              continue  # Skip to the next repository
+            fi
+            
             img_dir="$title/assets/img"
 
             if [ -d "$img_dir" ]; then
