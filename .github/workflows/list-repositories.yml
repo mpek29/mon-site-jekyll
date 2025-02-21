@@ -173,6 +173,7 @@ jobs:
           markdown_content+="---\n\n"
           markdown_content+="$manual_note\n\n"
           README_PART=$(echo "$README_CONTENT" | sed -n '/!\[Main Preview](assets\/img\/main\.png)/, /## 🌟 License/ p' | sed '1d;$d')
+          markdown_content+="$README_PART\n"
 
           echo -e "$markdown_content" > "_projects/$title.md"
           echo "✅ Created _projects/$title.md"
