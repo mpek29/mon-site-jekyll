@@ -2,7 +2,7 @@
 layout: page
 title: JBL-Flip-3-Emulator
 description: 🔊 JBL Flip 3 firmware simulator
-img: JBL-Flip-3-Emulator/assets/img/main.png
+img: assets/JBL-Flip-3-Emulator/img/main.png
 importance: 1
 git: https://github.com/mpek29/JBL-Flip-3-Emulator
 category: Computer Science

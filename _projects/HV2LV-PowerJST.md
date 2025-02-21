@@ -2,7 +2,7 @@
 layout: page
 title: HV2LV-PowerJST
 description: 🔋 Regulator 4.8V-15V -> 3.3V
-img: HV2LV-PowerJST/assets/img/main.png
+img: assets/HV2LV-PowerJST/img/main.png
 importance: 1
 git: https://github.com/mpek29/HV2LV-PowerJST
 category: Electronics

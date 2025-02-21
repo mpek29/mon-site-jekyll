@@ -2,7 +2,7 @@
 layout: page
 title: ZEthyDex
 description: 📱 Android app like a Pokédex
-img: ZEthyDex/assets/img/main.png
+img: assets/ZEthyDex/img/main.png
 importance: 1
 git: https://github.com/mpek29/ZEthyDex
 category: Computer Science

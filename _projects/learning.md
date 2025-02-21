@@ -2,7 +2,7 @@
 layout: page
 title: learning
 description: 🌐 Jekyll site to archive my knowledge
-img: learning/assets/img/main.png
+img: assets/learning/img/main.png
 importance: 1
 git: https://github.com/mpek29/learning
 category: Computer Science

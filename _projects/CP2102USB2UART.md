@@ -2,7 +2,7 @@
 layout: page
 title: CP2102USB2UART
 description: 🔌 CP2102 USB to UART reverse-engineered
-img: CP2102USB2UART/assets/img/main.png
+img: assets/CP2102USB2UART/img/main.png
 importance: 1
 git: https://github.com/mpek29/CP2102USB2UART
 category: Electronics
