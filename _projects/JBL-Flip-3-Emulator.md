@@ -9,6 +9,8 @@ category: Computer Science
 subcategory: Firmware Development
 ---
 
+![Main Preview](assets/img/main.png)
+
 
 
 ## Description

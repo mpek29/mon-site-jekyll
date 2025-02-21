@@ -5,9 +5,11 @@ description: 🔌 CP2102 USB to UART reverse-engineered
 img: assets/img/projects/CP2102USB2UART/main.png
 importance: 1
 git: https://github.com/mpek29/CP2102USB2UART
-category: Electronics
-subcategory: PCB Reverse Engineering
+category: other
+subcategory: General
 ---
+
+![Main Preview](assets/img/main.png)
 
 
 
@@ -34,9 +36,9 @@ An open-source reverse-engineered version of the CJMCU CP2102 USB to UART TTL ad
 | 🏷️ Chipset           | CP2102          | CP2102 |
 | 📌 Pin Mapping       | 6-Pin UART TTL  | 6-Pin UART TTL |
 | ⚡ Supported Voltage | 3.3V / 5V       | 3.3V / 5V |
-| 👐 Mechanical Drawing  | <img src="assets/img/original_pcb.png" width="300" height="300"> | <img src="assets/img/reversed_pcb.png" width="300" height="300"> |
-| 📝 Reverse-Engineered Schematic | N/A | <img src="assets/img/reversed_sch.png" width="300" height="300"> |
-| 📷 Photo             | <img src="assets/img/original_3d.png" width="300" height="300"> | <img src="assets/img/reversed_3d.png" width="300" height="300"> |
+| 👐 Mechanical Drawing  | <img src="{{ site.baseurl }}/assets/img/projects/CP2102USB2UART/original_pcb.png" width="300" height="300"> | <img src="{{ site.baseurl }}/assets/img/projects/CP2102USB2UART/reversed_pcb.png" width="300" height="300"> |
+| 📝 Reverse-Engineered Schematic | N/A | <img src="{{ site.baseurl }}/assets/img/projects/CP2102USB2UART/reversed_sch.png" width="300" height="300"> |
+| 📷 Photo             | <img src="{{ site.baseurl }}/assets/img/projects/CP2102USB2UART/original_3d.png" width="300" height="300"> | <img src="{{ site.baseurl }}/assets/img/projects/CP2102USB2UART/reversed_3d.png" width="300" height="300"> |
 
 ## 🛠️ How to Use
 ### 📌 Wiring Guide

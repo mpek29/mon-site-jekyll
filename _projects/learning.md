@@ -9,6 +9,8 @@ category: Computer Science
 subcategory: Software Development
 ---
 
+![Main Preview](assets/img/main.png)
+
 
 
 ## Description
