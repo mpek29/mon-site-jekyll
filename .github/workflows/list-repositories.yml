@@ -86,13 +86,6 @@ jobs:
               esac
             done
 
-            # Check the content of assets/img directory in each repository
-            echo "Cloning repository '$title' to check assets/img directory..."
-            if ! git clone --depth=1 "https://github.com/mpek29/$title.git" "$title"; then
-              echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
-              continue  # Skip to the next repository
-            fi
-
             img_dir="$title/assets/img"
 
             if [ -d "$img_dir" ]; then
@@ -139,8 +132,8 @@ jobs:
 
             # Retrieve the desired section of the README
             README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                                    -H "Accept: application/vnd.github.v3.raw" \
-                                    https://api.github.com/repos/mpek29/$title/readme)
+                            -H "Accept: application/vnd.github.v3.raw" \
+                            https://api.github.com/repos/mpek29/$title/readme)
 
             README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
 
