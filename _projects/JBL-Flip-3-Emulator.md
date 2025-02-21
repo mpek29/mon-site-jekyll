@@ -10,8 +10,6 @@ subcategory: Firmware Development
 ---
 
 
-
-
 An open-source project aimed at reproducing the tactile and sonic experience of the iconic JBL Flip 3 portable speaker. This emulator utilizes both hardware and software developed by myself, providing a customizable and engaging audio experience.
 
 ## 🎯 Purpose

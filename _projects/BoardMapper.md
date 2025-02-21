@@ -10,8 +10,6 @@ subcategory: Software Development
 ---
 
 
-
-
 BoardMapper is an open-source tool designed to automatically generate PCB layout. It labels component references (e.g. U1, R1, C1) directly on the circuit image, facilitating component identification for reverse engineering purposes.
 
 ## 🎯 Purpose
@@ -26,8 +24,8 @@ BoardMapper is an open-source tool designed to automatically generate PCB layout
 
 | Position | Original | Annotated |
 |----------|----------|-----------|
-| **Top**  | <img src="example/input/top.png" width="200"> | <img src="example/output/top_annotated.png" width="200"> |
-| **Bottom** | <img src="example/input/bottom.png" width="200"> | <img src="example/output/bottom_annotated.png" width="200"> |
+| **Top**  | {% include image.html path="assets/img/projects/BoardMapper/top.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/BoardMapper/top_annotated.png" width="300" height="300" %} |
+| **Bottom** | {% include image.html path="assets/img/projects/BoardMapper/bottom.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/BoardMapper/bottom_annotated.png" width="300" height="300" %} |
 
 ## 📋 Requirements
 
