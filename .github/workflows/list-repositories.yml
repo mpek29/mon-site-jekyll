@@ -122,9 +122,6 @@ jobs:
           # Remplacer les balises <img> par la syntaxe Jekyll
           README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %}|g")
 
-          # Corriger les images dans les tableaux
-          README_PART=$(echo "$README_PART" | sed -E "s|\| <img src=\"assets/img/([^\"]+).png\"[^>]*> \|| {% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" height=\"300\" %} |g")
-
           markdown_content+="$README_PART\n"
           
           echo -e "$markdown_content" > "_projects/$title.md"
