@@ -11,9 +11,6 @@ subcategory: Firmware Development
 
 
 
-# JBL-Flip-3-Emulator
-
-## 🚀 Overview
 ![Main Preview](assets/img/main.png)
 
 An open-source project aimed at reproducing the tactile and sonic experience of the iconic JBL Flip 3 portable speaker. This emulator utilizes both hardware and software developed by myself, providing a customizable and engaging audio experience.
@@ -35,9 +32,4 @@ An open-source project aimed at reproducing the tactile and sonic experience of 
 
 ## 🙏 Acknowledgments
 I would like to thank Adafruit for their inspiration, especially for their “Aluminum Mounting Grid,” which I printed a 3D copy of with my Ender3. Their excellent modules have significantly influenced my design choices.
-
-## 🌟 License
-This project is open-source. Feel free to use, modify, and contribute! 🚀
-
-Please don't hesitate to contact me if you have any questions.
 

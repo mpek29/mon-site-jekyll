@@ -11,9 +11,6 @@ subcategory: PCB Design
 
 
 
-# HV2LV-PowerJST
-
-## 🚀 Overview
 ![Main Preview](assets/img/main.png)
 
 **HV2LV-PowerJST** is an open-source PCB designed to step down **4.8V - 15V** to a stable **3.3V** output using an **AMS1117 voltage regulator**. The board features **JST-PH connectors** for easy integration into embedded projects, IoT devices, and prototyping setups.  
@@ -40,7 +37,4 @@ subcategory: PCB Design
 | 📜 Schematic | 🖥️ PCB Layout | 🏗️ 3D |
 |-----------|-----------|-----------|
 | ![Schematic](assets/img/schematic.png) | ![PCB Layout](assets/img/pcb_layout.png) | ![3D](assets/img/3d.png) |
-
-## 🌟 License
-This project is open-source. Feel free to use, modify, and contribute! 🚀
 

@@ -11,9 +11,6 @@ subcategory: PCB Design
 
 
 
-# MicroUSB2JST
-
-## 🚀 Overview
 ![Main Preview](assets/img/main.png)
 
 **MicroUSB2JST** is an open-source PCB that acts as a bridge between a Micro USB port and JST connectors (JST-SH and JST-PH). This module is designed to simplify connections for embedded projects, prototyping, and power distribution.
@@ -36,7 +33,4 @@ subcategory: PCB Design
 | 📜 Schematic | 🖥️ PCB Layout | 🏗️ 3D |
 |-----------|-----------|-----------|
 | ![Schematic](assets/img/schematic.png) | ![PCB Layout](assets/img/pcb_layout.png) | ![3D](assets/img/3d.png) |
-
-## 🌟 License
-This project is open-source. Feel free to use, modify, and contribute! 🚀
 
