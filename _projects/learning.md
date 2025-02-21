@@ -11,7 +11,6 @@ subcategory: Software Development
 
 
 
-![Main Preview](assets/img/main.png)
 
 An open-source website created using Jekyll and the "al-folio" theme, designed to archive my learning journey and share knowledge with anyone interested. This project serves as a personal portfolio and a resource hub.
 

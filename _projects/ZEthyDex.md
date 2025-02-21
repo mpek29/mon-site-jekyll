@@ -11,7 +11,6 @@ subcategory: Software Development
 
 
 
-![Main Preview](assets/img/main.png)
 
 An open-source application designed in the style of a Pokédex, allowing users to explore and catalog various creatures and features. This project aims to provide a fun and interactive way to engage with the Pokémon universe.
 

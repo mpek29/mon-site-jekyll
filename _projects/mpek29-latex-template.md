@@ -11,7 +11,6 @@ subcategory: Documentation
 
 
 
-![Main Preview](assets/img/main.png)
 
 A beautiful, simple, and clean LaTeX template designed for ENIB students who want to write project reports. If you like the template, feel free to give it a star!
 

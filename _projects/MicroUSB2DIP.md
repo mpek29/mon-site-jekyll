@@ -11,7 +11,6 @@ subcategory: PCB Reverse Engineering
 
 
 
-![Main Preview](assets/img/main.png)
 
 This is an open-source reverse-engineered version of a Micro USB to DIP adapter, based on the original component available [here](https://fr.aliexpress.com/item/32947889760.html). The goal of this project was to practice reverse engineering as a learning exercise and to prepare for a future adaptation in a larger project.
 
