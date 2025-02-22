@@ -35,7 +35,7 @@ jobs:
           cat <<EOF > _pages/about.md
           ---
           layout: about
-          title: À propos
+          title: About
           permalink: /
           
           profile:
