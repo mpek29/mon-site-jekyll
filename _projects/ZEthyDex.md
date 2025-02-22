@@ -29,8 +29,8 @@ An open-source application designed in the style of a Pokédex, allowing users t
 
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="assets/img/1.jpg" alt="Screenshot 1" width="30%">
-    <img src="assets/img/2.jpg" alt="Screenshot 2" width="30%">
-    <img src="assets/img/3.jpg" alt="Screenshot 3" width="30%">
+    {% include image.html path="assets/img/projects/ZEthyDex/1.png" width="300" height="300" %}
+    {% include image.html path="assets/img/projects/ZEthyDex/2.png" width="300" height="300" %}
+    {% include image.html path="assets/img/projects/ZEthyDex/3.png" width="300" height="300" %}
 </div>
 
