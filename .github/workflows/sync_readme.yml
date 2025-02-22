@@ -1,6 +1,11 @@
 name: Update About Page from External README
 
 on:
+  push:
+    branches:
+      - main # Déclenchement à chaque push sur la branche principale
+    paths:
+      - '_pages/about.md' # Vérifie si le fichier about.md est modifié
   schedule:
     - cron: '0 12 * * *' # Exécute tous les jours à midi
   workflow_dispatch: # Permet de le lancer manuellement
@@ -17,17 +22,24 @@ jobs:
         run: |
           mkdir -p temp
           curl -f -o temp/README.md https://raw.githubusercontent.com/mpek29/MPek29/master/README.md
-          if [ $? -ne 0 ]; then echo "Failed to download README.md"; exit 1; fi
+          if [ $? -ne 0 ]; then 
+            echo "❌ Échec du téléchargement du README.md"; 
+            exit 1
+          fi
 
-      - name: Clean README.md (remove specific content and Markdown headers)
+      - name: Extract content before "## 🛠️ Skills"
+        run: |
+          awk '/## 🛠️ Skills/ {exit} {print}' temp/README.md > temp/extracted.md
+
+      - name: Clean extracted README.md
         run: |
           # Supprimer la phrase "🚀 About Me"
-          sed -i '/🚀 About Me/d' temp/README.md
+          sed -i '/🚀 About Me/d' temp/extracted.md
 
           # Supprimer tous les titres Markdown en supprimant les "#"
-          sed -i 's/^#* //g' temp/README.md
+          sed -i 's/^#* //g' temp/extracted.md
 
-      - name: Convert README.md to about.md
+      - name: Convert extracted content to about.md
         run: |
           mkdir -p _pages
           
@@ -50,13 +62,20 @@ jobs:
           
           EOF
           
-          # Ajouter la section du README.md nettoyé
-          sed -n '/Hi there!/,/sensor for precise regulation./p' temp/README.md >> _pages/about.md
-          
+          # Ajouter la section extraite et nettoyée
+          cat temp/extracted.md >> _pages/about.md
+
+      - name: Check for changes
+        run: |
+          if git diff --quiet _pages/about.md; then
+            echo "✅ Aucun changement détecté, fin du workflow."
+            exit 0
+          fi
+
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add _pages/about.md
-          git commit -m "Auto-update about.md from external README.md" || exit 0
+          git commit -m "🔄 Auto-update about.md from external README.md" || exit 0
           git push
