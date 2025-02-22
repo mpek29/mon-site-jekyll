@@ -3,7 +3,7 @@ name: Update About Page from External README
 on:
   push:
     branches:
-      - main # Déclenchement à chaque push sur la branche principale
+      - master # Déclenchement à chaque push sur la branche principale
     paths:
       - '_pages/about.md' # Vérifie si le fichier about.md est modifié
   schedule:
