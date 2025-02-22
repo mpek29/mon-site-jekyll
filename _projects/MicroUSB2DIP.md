@@ -27,9 +27,9 @@ This is an open-source reverse-engineered version of a Micro USB to DIP adapter,
 | 🖥️ PCB Design        | Proprietary     | Open-source & customizable |
 | 🔌 Connector Type    | Micro USB       | Micro USB |
 | 📌 Pin Mapping      | Standard DIP    | Standard DIP |
-| 👐 Mechanical Drawing  | {% include image.html path="assets/img/projects/MicroUSB2DIP/original_pcb.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_pcb.png" width="300" height="300" %} |
-| 📝 Reverse-Engineered Schematic | N/A | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_sch.png" width="300" height="300" %} |
-| 📷 Photo             | {% include image.html path="assets/img/projects/MicroUSB2DIP/original_3d.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_3d.png" width="300" height="300" %} |
+| 👐 Mechanical Drawing  | {% include image.html path="assets/img/projects/MicroUSB2DIP/original_pcb.png" width="300" %} | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_pcb.png" width="300" %} |
+| 📝 Reverse-Engineered Schematic | N/A | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_sch.png" width="300" %} |
+| 📷 Photo             | {% include image.html path="assets/img/projects/MicroUSB2DIP/original_3d.png" width="300" %} | {% include image.html path="assets/img/projects/MicroUSB2DIP/reversed_3d.png" width="300" %} |
 
 ## 🛠️ How to Use
 

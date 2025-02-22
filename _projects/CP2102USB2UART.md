@@ -29,9 +29,9 @@ An open-source reverse-engineered version of the CJMCU CP2102 USB to UART TTL ad
 | 🏷️ Chipset           | CP2102          | CP2102 |
 | 📌 Pin Mapping       | 6-Pin UART TTL  | 6-Pin UART TTL |
 | ⚡ Supported Voltage | 3.3V / 5V       | 3.3V / 5V |
-| 👐 Mechanical Drawing  | {% include image.html path="assets/img/projects/CP2102USB2UART/original_pcb.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_pcb.png" width="300" height="300" %} |
-| 📝 Reverse-Engineered Schematic | N/A | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_sch.png" width="300" height="300" %} |
-| 📷 Photo             | {% include image.html path="assets/img/projects/CP2102USB2UART/original_3d.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_3d.png" width="300" height="300" %} |
+| 👐 Mechanical Drawing  | {% include image.html path="assets/img/projects/CP2102USB2UART/original_pcb.png" width="300" %} | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_pcb.png" width="300" %} |
+| 📝 Reverse-Engineered Schematic | N/A | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_sch.png" width="300" %} |
+| 📷 Photo             | {% include image.html path="assets/img/projects/CP2102USB2UART/original_3d.png" width="300" %} | {% include image.html path="assets/img/projects/CP2102USB2UART/reversed_3d.png" width="300" %} |
 
 ## 🛠️ How to Use
 

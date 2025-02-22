@@ -33,5 +33,5 @@ subcategory: PCB Design
 
 | 📜 Schematic | 🖥️ PCB Layout | 🏗️ 3D |
 |-----------|-----------|-----------|
-| {% include image.html path="assets/img/projects/MicroUSB2JST/schematic.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/MicroUSB2JST/pcb_layout.png" width="300" height="300" %} | {% include image.html path="assets/img/projects/MicroUSB2JST/3d.png" width="300" height="300" %} |
+| {% include image.html path="assets/img/projects/MicroUSB2JST/schematic.png" width="300" %} | {% include image.html path="assets/img/projects/MicroUSB2JST/pcb_layout.png" width="300" %} | {% include image.html path="assets/img/projects/MicroUSB2JST/3d.png" width="300" %} |
 
