@@ -6,8 +6,8 @@ full_name: mpek29/Burgman650-Simulation
 img: assets/img/projects/Burgman650-Simulation/main.png
 importance: 1
 git: https://github.com/mpek29/Burgman650-Simulation
-category: other
-subcategory: General
+category: Mechanical Engineering
+subcategory: Analysis and Simulation
 ---
 
 
