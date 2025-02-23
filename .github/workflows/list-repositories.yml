@@ -84,6 +84,7 @@ jobs:
                 "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
                 "materials-mechanics-materials") main_topic="Mechanical Engineering"; subcategory="Materials and Mechanics of Materials" ;;
                 "control-systems") main_topic="Mechanical Engineering"; subcategory="Control Systems" ;;
+                "automation") main_topic="Mechanical Engineering"; subcategory="Automation" ;;
               esac
             done
 
