@@ -3,15 +3,11 @@ name: Update About Page from External README
 on:
   push:
     branches:
-      - master # Déclenchement à chaque push sur la branche principale
-    paths:
-      - '_pages/about.md' # Vérifie si le fichier about.md est modifié
-  schedule:
-    - cron: '0 12 * * *' # Exécute tous les jours à midi
-  workflow_dispatch: # Permet de le lancer manuellement
+      - master
+  workflow_dispatch:
 
 jobs:
-  update-about:
+  list_repositories:
     runs-on: ubuntu-latest
 
     steps:
