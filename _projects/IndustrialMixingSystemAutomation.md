@@ -35,5 +35,5 @@ subcategory: Automation
 
 | 🏭 PLC Control | 🌍 Supervision System | 🎛️ HMI Evolution |
 |-----------|-----------|-----------|
-| ![PLC](assets/img/plc.png) | ![Supervision](assets/img/supervision.png) | ![HMI](assets/img/hmi.png) |
+| {% include image.html path="assets/img/projects/IndustrialMixingSystemAutomation/plc.png" width="300" %} | {% include image.html path="assets/img/projects/IndustrialMixingSystemAutomation/supervision.png" width="300" %} | {% include image.html path="assets/img/projects/IndustrialMixingSystemAutomation/hmi.png" width="300" %} |
 

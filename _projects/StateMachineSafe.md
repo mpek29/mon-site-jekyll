@@ -34,5 +34,5 @@ subcategory: Digital System Design
 
 | 🎭 State Graph | 🗂️ Transition Table | ⚡ Logic Circuit |
 |-----------|-----------|-----------|
-| ![State Graph](assets/img/state_graph.png) | ![Transition Table](assets/img/transition_table.png) | ![Logic Circuit](assets/img/logic_circuit.png) |
+| {% include image.html path="assets/img/projects/StateMachineSafe/state_graph.png" width="300" %} | {% include image.html path="assets/img/projects/StateMachineSafe/transition_table.png" width="300" %} | {% include image.html path="assets/img/projects/StateMachineSafe/logic_circuit.png" width="300" %} |
 

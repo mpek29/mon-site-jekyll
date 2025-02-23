@@ -34,5 +34,5 @@ subcategory: General
 
 | ⚙️ Modeling | 📊 Simulation | 🔄 Optimization |
 |-----------|-----------|-----------|
-| ![Modeling](assets/img/modeling.png) | ![Simulation](assets/img/simulation.png) | ![Optimization](assets/img/optimization.png) |
+| {% include image.html path="assets/img/projects/AntennaDriveSystemDynamics/modeling.png" width="300" %} | {% include image.html path="assets/img/projects/AntennaDriveSystemDynamics/simulation.png" width="300" %} | {% include image.html path="assets/img/projects/AntennaDriveSystemDynamics/optimization.png" width="300" %} |
 

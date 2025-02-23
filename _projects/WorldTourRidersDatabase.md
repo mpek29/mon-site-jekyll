@@ -35,5 +35,5 @@ subcategory: Software Development
 
 | 🏗️ UML Modeling | 🔗 Table Associations | 📊 Query Optimization |
 |-----------|-----------|-----------|
-| ![UML Diagram](assets/img/uml_diagram.png) | ![Table Relationships](assets/img/table_relationships.png) | ![Query Execution](assets/img/query_execution.png) |
+| {% include image.html path="assets/img/projects/WorldTourRidersDatabase/uml_diagram.png" width="300" %} | {% include image.html path="assets/img/projects/WorldTourRidersDatabase/table_relationships.png" width="300" %} | {% include image.html path="assets/img/projects/WorldTourRidersDatabase/query_execution.png" width="300" %} |
 
