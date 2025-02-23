@@ -74,6 +74,7 @@ jobs:
                 "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
                 "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
                 "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
+                "digital-system-design") main_topic="Electronics"; subcategory="Digital System Design" ;;
                 "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
                 "signal-image-processing") main_topic="Electronics"; subcategory="Signal and Image Processing" ;;
                 "pcb-reverse-engineering") main_topic="Electronics"; subcategory="PCB Reverse Engineering" ;;
