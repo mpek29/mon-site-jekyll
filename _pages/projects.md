@@ -18,6 +18,7 @@ subcategory_order:
     - Documentation
   Electronics:
     - PCB Design
+    - Digital System Design
     - PCB Reverse Engineering
     - Digital Electronics
     - Power Electronics
@@ -29,6 +30,7 @@ subcategory_order:
     - Fluid Mechanics
     - Materials and Mechanics of Materials
     - Control Systems
+    - Automation
 ---
 
 <!-- pages/projects.md -->
