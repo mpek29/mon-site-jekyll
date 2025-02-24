@@ -73,6 +73,8 @@ jobs:
                 "devops-automation") main_topic="Computer Science"; subcategory="DevOps & Automation" ;;
                 "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
                 "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
+
+                
                 "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
                 "digital-system-design") main_topic="Electronics"; subcategory="Digital System Design" ;;
                 "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
@@ -80,6 +82,8 @@ jobs:
                 "pcb-reverse-engineering") main_topic="Electronics"; subcategory="PCB Reverse Engineering" ;;
                 "pcb-repair") main_topic="Electronics"; subcategory="PCB Repair" ;;
                 "digital-electronics") main_topic="Electronics"; subcategory="Digital Electronics" ;;
+
+                
                 "mechanical-design") main_topic="Mechanical Engineering"; subcategory="Mechanical Design" ;;
                 "analysis-simulation") main_topic="Mechanical Engineering"; subcategory="Analysis and Simulation" ;;
                 "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
