@@ -1,22 +1,32 @@
-name: Generate Portfolio PDF
+name: Compile LaTeX
 
-on:  
+on:
   push:
-    branches:
-      - master  # Ou la branche principale de ton repo
+    paths:
+      - 'latex/**.tex'
+  pull_request:
+    paths:
+      - 'latex/**.tex'
+  workflow_dispatch:
 
 jobs:
-  build_pdf:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
+      - name: Install LaTeX
+        run: sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex
 
-      - name: Create output directory
-        run: mkdir -p output  # Création du dossier output
+      - name: Compile LaTeX document
+        run: |
+          cd latex
+          pdflatex -interaction=nonstopmode -output-directory=. main.tex
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-pdf
+          path: latex/main.pdf
