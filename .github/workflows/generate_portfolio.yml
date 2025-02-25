@@ -3,7 +3,7 @@ name: Generate Portfolio PDF
 on:  
   push:
     branches:
-      - master  # Ou la branche que tu utilises
+      - master  # Ou la branche principale de ton repo
 
 jobs:
   build_pdf:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -43,7 +43,7 @@ jobs:
           xelatex portfolio.tex
 
       - name: Upload PDF artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: portfolio
           path: output/portfolio.pdf
