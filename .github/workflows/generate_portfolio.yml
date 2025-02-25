@@ -3,7 +3,7 @@ name: Generate Portfolio PDF
 on:  
   push:
     branches:
-      - main  # Ou la branche que tu utilises
+      - master  # Ou la branche que tu utilises
 
 jobs:
   build_pdf:
