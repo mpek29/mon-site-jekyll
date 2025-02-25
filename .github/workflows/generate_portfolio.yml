@@ -1,10 +1,9 @@
-name: Compile LaTeX
+name: Compile LaTeX on Master Push
 
 on:
   push:
-    paths:
-      - 'latex/**.tex'
-  pull_request:
+    branches:
+      - master
     paths:
       - 'latex/**.tex'
   workflow_dispatch:
@@ -24,6 +23,7 @@ jobs:
         run: |
           cd latex
           pdflatex -interaction=nonstopmode -output-directory=. main.tex
+          pdflatex -interaction=nonstopmode -output-directory=. main.tex  # Deuxième passage pour stabiliser les refs
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
