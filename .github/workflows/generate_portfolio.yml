@@ -37,6 +37,7 @@ jobs:
           echo "\date{\today}" >> output/portfolio.tex
           echo "\maketitle" >> output/portfolio.tex
 
+          # Traiter chaque fichier Markdown et les inclure dans le document
           for file in _projects/*.md; do
             echo "Processing $file"
             pandoc "$file" --from markdown --to latex --standalone --pdf-engine=xelatex --include-in-header=output/header.tex >> output/portfolio.tex
