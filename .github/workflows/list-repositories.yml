@@ -29,7 +29,7 @@ jobs:
             exit 1
           fi
 
-          REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, full_name: .full_name, topics: (.topics // [])}]')
+          REPOS_LIST=$(echo "$REPOS_JSON" | jq -c '[.[] | {title: .name, description: (.description // "No description available"), url: .html_url, homepage: (.homepage // ""), full_name: .full_name, topics: (.topics // [])}]')
 
           if [ -z "$REPOS_LIST" ] || [ "$REPOS_LIST" == "[]" ]; then
             echo "❌ No repositories found for user mpek29."
@@ -45,7 +45,7 @@ jobs:
 
           echo "$REPOS_LIST" | jq -c '.[]' | while read -r repo; do
             title=$(echo "$repo" | jq -r '.title')
-            full_name=$(echo "$repo" | jq -r '.full_name')  # Add this line to retrieve full_name
+            full_name=$(echo "$repo" | jq -r '.full_name')
 
             if [[ "$title" == "MPek29" || "$title" == "en" || "$title" == "mon-site-jekyll" || "$title" == "mpek29.github.io" ]]; then
               echo "⚠️ Repository '$title' ignored."
@@ -54,6 +54,7 @@ jobs:
 
             description=$(echo "$repo" | jq -r '.description')
             url=$(echo "$repo" | jq -r '.url')
+            homepage=$(echo "$repo" | jq -r '.homepage')
 
             if [ -z "$title" ]; then
               echo "⚠️ Repository with no name detected, it will be ignored."
@@ -61,7 +62,7 @@ jobs:
             fi
 
             # Determine category and subcategory
-            main_topic="other"
+            main_topic="Other"
             subcategory="General"
 
             for topic in $(echo "$repo" | jq -r '.topics[]'); do
@@ -74,7 +75,6 @@ jobs:
                 "artificial-intelligence") main_topic="Computer Science"; subcategory="Artificial Intelligence" ;;
                 "documentation") main_topic="Computer Science"; subcategory="Documentation" ;;
 
-                
                 "pcb-design") main_topic="Electronics"; subcategory="PCB Design" ;;
                 "digital-system-design") main_topic="Electronics"; subcategory="Digital System Design" ;;
                 "power-electronics") main_topic="Electronics"; subcategory="Power Electronics" ;;
@@ -83,7 +83,6 @@ jobs:
                 "pcb-repair") main_topic="Electronics"; subcategory="PCB Repair" ;;
                 "digital-electronics") main_topic="Electronics"; subcategory="Digital Electronics" ;;
 
-                
                 "mechanical-design") main_topic="Mechanical Engineering"; subcategory="Mechanical Design" ;;
                 "analysis-simulation") main_topic="Mechanical Engineering"; subcategory="Analysis and Simulation" ;;
                 "fluid-mechanics") main_topic="Mechanical Engineering"; subcategory="Fluid Mechanics" ;;
@@ -93,11 +92,11 @@ jobs:
               esac
             done
 
-            # Check the content of assets/img directory in each repository
+            # Clone repository to check for assets/img directory
             echo "Cloning repository '$title' to check assets/img directory..."
-            if ! git clone --depth=1 "https://github.com/$full_name.git" "$title"; then  # Use full_name for cloning
+            if ! git clone --depth=1 "https://github.com/$full_name.git" "$title"; then
               echo "⚠️ Failed to clone repository '$title'. Continuing with the next repository..."
-              continue  # Skip to the next repository
+              continue
             fi
             img_dir="$title/assets/img"
 
@@ -106,59 +105,52 @@ jobs:
               img_files=$(find "$img_dir" -type f -iname '*.png')
               if [ -z "$img_files" ]; then
                 echo "⚠️ No images found in 'assets/img' for repository '$title'."
-                img_path="assets/img/projects/default.png"  # Default image if none found
+                img_path="assets/img/projects/default.png"
               else
-                echo "Images found in 'assets/img' for repository '$title':"
-                echo "$img_files"
-
-                # Create the target directory for images
                 target_dir="assets/img/projects/$title"
                 mkdir -p "$target_dir"
 
-                # Copy images to the target directory
                 for img in $img_files; do
                   cp "$img" "$target_dir/"
-                  echo "✅ Copied image '$img' to '$target_dir'."
                 done
 
-                # Use the first image found as the representative image
-                img_path=$(echo "$img_files" | head -n 1)  # Use the first image found
+                img_path=$(echo "$img_files" | head -n 1)
               fi
             else
               echo "⚠️ 'assets/img' directory does not exist in repository '$title'."
-              img_path="assets/img/projects/default.png"  # Default image if directory doesn't exist
+              img_path="assets/img/projects/default.png"
             fi
 
-            # Clean up by removing the cloned repository
             rm -rf "$title"
 
+            # Create markdown content
             markdown_content="---\n"
             markdown_content+="layout: page\n"
             markdown_content+="title: $title\n"
             markdown_content+="description: $description\n"
-            markdown_content+="full_name: $full_name\n"  # Add full_name to markdown content
+            markdown_content+="full_name: $full_name\n"
             markdown_content+="img: assets/img/projects/$title/main.png\n"
             markdown_content+="importance: 1\n"
             markdown_content+="git: $url\n"
             markdown_content+="category: $main_topic\n"
             markdown_content+="subcategory: $subcategory\n"
+
+            if [ -n "$homepage" ] && [ "$homepage" != "null" ]; then
+              markdown_content+="web: $homepage\n"
+            fi
+
             markdown_content+="---\n\n"
 
-            # Retrieve the desired section of the README using full_name
+            # Retrieve README content
             README_CONTENT=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                             -H "Accept: application/vnd.github.v3.raw" \
-                            https://api.github.com/repos/$full_name/readme)  # Use full_name for README content
+                            https://api.github.com/repos/$full_name/readme)
 
             README_PART=$(echo "$README_CONTENT" | sed -n '/## 🚀 Overview/,/## 🌟 License/p' | sed '1d;$d')
 
-            # Filter out unwanted lines
             README_PART=$(echo "$README_PART" | sed '/!\[Main Preview\](assets\/img\/main.png)/d')
-            
-            # Add line breaks after headings
             README_PART=$(echo "$README_PART" | sed -E "s|(## [^\n]+)|\1\n|g")
             README_PART=$(echo "$README_PART" | sed -E "s|(### [^\n]+)|\1\n|g")
-
-            # Replace <img> tags with Jekyll syntax
             README_PART=$(echo "$README_PART" | sed -E "s|<img src=\"assets/img/([^\"]+).png\"[^>]*>|{% include image.html path=\"assets/img/projects/$title/\1.png\" width=\"300\" %}|g")
 
             markdown_content+="$README_PART\n"
