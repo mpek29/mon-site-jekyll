@@ -33,7 +33,7 @@ jobs:
 
           for file in _projects/*.md; do
             echo "Processing $file"
-            pandoc "$file" --from markdown --to latex --standalone --latex-engine=xelatex >> output/portfolio.tex
+            pandoc "$file" --from markdown --to latex --standalone --pdf-engine=xelatex >> output/portfolio.tex
           done
 
           echo "\end{document}" >> output/portfolio.tex
