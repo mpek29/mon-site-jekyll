@@ -18,13 +18,15 @@ jobs:
           sudo apt update
           sudo apt install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
 
+      - name: Create output directory
+        run: mkdir -p output  # Création du dossier output
+
       - name: Create header file
         run: |
           echo "\PassOptionsToPackage{unicode}{hyperref}" > output/header.tex  # Création du fichier d'en-tête
 
       - name: Generate LaTeX document
         run: |
-          mkdir -p output
           echo "\documentclass{article}" > output/portfolio.tex
           echo "\usepackage{graphicx}" >> output/portfolio.tex
           echo "\usepackage{hyperref}" >> output/portfolio.tex
